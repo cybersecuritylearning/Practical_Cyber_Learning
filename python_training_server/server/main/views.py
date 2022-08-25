@@ -27,8 +27,9 @@ def run_simple_python(request):
 
     for _mod_inst in modules_instances:
         if request.method == _mod_inst.REQUEST_METHOD_SUPPORTED:
-            _mod_obj = _mod_inst("Working")
-            _mod_obj.print_req()
-        
+            _mod_obj = _mod_inst(request)
+            result = _mod_obj.process()
+            
+                
     
-    return HttpResponse("test")
+    return HttpResponse(response)
