@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from importlib import import_module
 from django.http import HttpResponse
+from .models import UserToken
 import glob,os,sys
+from datetime import datetime
+from hashlib import sha256
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 # Create your views here.
@@ -29,7 +32,21 @@ def run_simple_python(request):
         if request.method == _mod_inst.REQUEST_METHOD_SUPPORTED:
             _mod_obj = _mod_inst(request)
             result = _mod_obj.process()
-            
+            response = result['Data']
                 
     
     return HttpResponse(response)
+
+def user_token(request):
+    now = datetime.now()
+    user_token = sha256(str(now.microsecond).encode()).hexdigest()
+    try:
+        User_data = UserToken()
+        User_data.UserId = user_token
+        User_data.Score = 0
+        User_data.Time_to_live = datetime.now()
+        User_data.save()
+    except:
+        return HttpResponse("User could not be registered!")
+    
+    return HttpResponse(user_token)
