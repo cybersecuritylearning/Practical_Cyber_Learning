@@ -14,7 +14,13 @@ PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 def hello(request):
     return render(request = request,
                   template_name='main/home.html')
-    
+
+def learn(request):
+    return render(request = request,
+                template_name='main/quest.html',
+                context={"message":"Works"}
+            )
+
 def run_simple_python(request):
     
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
