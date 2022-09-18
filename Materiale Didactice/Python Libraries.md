@@ -1,0 +1,41 @@
+# Python Libraries
+
+- **Scapy**
+    - **Installation Command**: pip install scapy
+    - **Advantages**:
+        - Easy to operate on responsive packets of protocol
+        - Allow to decode and transfer the packets. Further, it give match requests / respond to others
+        - Support processes as scan, unit tests, attack detection, traceroute, and network monitor.
+        - Provide better solution for existing problems (padding, decrypting, encapsulating, etc.)
+- **Socket**
+    - **How to install**: Enable the accessibility of the BSD socket interface
+    - **Major Idea**:
+        - Offer system call and library interface to work with socket function
+        - Socket object act as the return value of socket() function
+        - Executes on different system calls
+        - Allow high-level metrics compare to other interfaces
+        - Support automated buffer allocation where length is declared on send process
+- **Impacket**
+    - **Installation Command**: pip install impacket
+    - **Advantages**:
+        - Include python classes for performing network protocol related tasks
+        - Packets are handled at low-level
+        - Establish communication with window standards (NetBios, SMB, DCERPC and MSSQL)
+        - For instance: Polenum, PorLa, CrackMapExec, Ranger, and more
+- **Nmap**
+    - **Installation Command**: pip install python-nmap
+    - **Advantages**:
+        - Suitable for system admin operations
+        - Automate port scan process and analyze the outcome
+        - Enable to run the customized attacks
+- **Cryptography**
+    - **Installation Command**: pip install cryptography
+    - **Advantages**:
+        - Incorporates high / low-level interfaces for processing cryptographic techniques.
+        For instance: message digests and key derivation
+        - Here, low-level is otherwise known as “hazmat” layer due to its risks which carries out in hazmat package
+- **Requests**
+    - **Installation Command**: pip install requests
+    - **Advantages**:
+        - It is an Apache2 HTTP library (Licensed) which enables user to communicate with the language. So, it doesn’t require URL query / POST data
+        - Support automated HTTP request pool service
