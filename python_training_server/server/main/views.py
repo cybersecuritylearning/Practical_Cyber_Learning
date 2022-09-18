@@ -1,9 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from importlib import import_module
 from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.models import User
 from .models import UserToken
 from .core.Messages import MESSAGES 
+from django.contrib import messages
 import glob,os,sys
 from datetime import datetime
 from hashlib import sha256
@@ -12,9 +15,37 @@ PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 
 # Create your views here.
-def hello(request):
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Logged out successfully!")
+    return redirect("main:hello_page")
+
+def login_request(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request=request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}")
+                return redirect('main:hello_page')
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    form = AuthenticationForm()
     return render(request = request,
-                  template_name='main/home.html')
+                  template_name = "main/login.html",
+                  context={"form":form})
+
+def hello(request):
+    username = request.user.username
+    return render(request = request,
+                  template_name='main/home.html',
+                  context={"username":username})
 
 def learn(request):
     
@@ -75,5 +106,15 @@ def user_token(request):
     return HttpResponse(user_token)
 
 def register(request):
+    if request.method =="POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            login(request, user)
+            return redirect("main:hello_page")
+
     form = UserCreationForm
-    return render(request=request, template_name="main/register.html",context={"form":form})
+    return render(request=request, 
+                template_name="main/register.html",
+                context={"form":form})
