@@ -16,6 +16,7 @@ def hello(request):
                   template_name='main/home.html')
 
 def learn(request):
+    
     return render(request = request,
                 template_name='main/quest.html',
                 context={"message":"Works"}
