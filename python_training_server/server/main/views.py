@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from importlib import import_module
 from django.http import HttpResponse
+from django.contrib.auth.forms import UserCreationForm
 from .models import UserToken
 from .core.Messages import MESSAGES 
 import glob,os,sys
@@ -72,3 +73,7 @@ def user_token(request):
         return HttpResponse(MESSAGES.REGISTER_ERROR)
     
     return HttpResponse(user_token)
+
+def register(request):
+    form = UserCreationForm
+    return render(request=request, template_name="main/register.html",context={"form":form})

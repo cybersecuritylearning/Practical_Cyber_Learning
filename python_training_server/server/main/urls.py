@@ -9,5 +9,6 @@ urlpatterns = [
     path("hello/", views.hello, name="hello_page"),
     path("simple/",views.run_simple_python, name="Simple_python_module"),
     path("get_token/",views.user_token, name="Simple_User_Token"),
-    path("learn/",views.learn, name="Learn_page_for_users")
+    path("learn/",views.learn, name="Learn_page_for_users"),
+    path("register/",views.register, name="Registration")
 ]
