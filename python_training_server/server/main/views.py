@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from importlib import import_module
 from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
 from .models import UserToken
+from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from django.contrib import messages
 import glob,os,sys
@@ -42,10 +43,23 @@ def login_request(request):
                   context={"form":form})
 
 def hello(request):
-    username = request.user.username
+    
+    User = UserToken.objects.filter(User=request.user)[0]
+    button_v = "Start"
+    url = "../learn"
+    message = f"Welcome user {User.User.username} to Cyber Security Python Hands On Course"
+    if len(User.Passed_modules):
+        button_v = "Continue"
+        message = f"Welcome back user <br>{User.User.username}</br>"
+    data = {
+        "Button_display":button_v,
+        "redirect":url,
+        "Message":message
+
+    }
     return render(request = request,
                   template_name='main/home.html',
-                  context={"username":username})
+                  context=data)
 
 def learn(request):
     
@@ -91,30 +105,28 @@ def run_simple_python(request):
     
     return HttpResponse(response)
 
-def user_token(request):
-    now = datetime.now()
-    user_token = sha256(str(now.microsecond).encode()).hexdigest()
-    try:
-        User_data = UserToken()
-        User_data.UserId = user_token
-        User_data.Score = 0
-        User_data.Time_to_live = datetime.now()
-        User_data.save()
-    except:
-        return HttpResponse(MESSAGES.REGISTER_ERROR)
-    
-    return HttpResponse(user_token)
-
 def register(request):
     if request.method =="POST":
-        form = UserCreationForm(request.POST)
+        form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save()
-            username = form.cleaned_data.get('username')
             login(request, user)
+            now = datetime.now()
+            user_token = sha256(str(now.microsecond).encode()).hexdigest()
+            user_obj = User.objects.get(username=form.cleaned_data.get("username"))
+            try:
+                
+                User_data = UserToken()
+                User_data.User = user
+                User_data.Score = 0 
+                User_data.UserId = user_token
+                User_data.save()
+            except Exception as e:
+                print(str(e))
+                return HttpResponse(MESSAGES.REGISTER_ERROR)
             return redirect("main:hello_page")
 
-    form = UserCreationForm
+    form = NewUserForm
     return render(request=request, 
                 template_name="main/register.html",
                 context={"form":form})
