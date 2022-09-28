@@ -13,7 +13,12 @@ class FIRST_GET_REQUEST:
 
         print(PARENT_DIR)
         if not len(self.request.GET):
-            self.result["Data"] = "Great Job!"
+            self.result["Data"] = """
+                        
+                            Great Job!
+                        You can proceed!
+                        
+                        """
             
         return self.result
 

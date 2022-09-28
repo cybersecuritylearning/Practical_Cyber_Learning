@@ -1,13 +1,15 @@
 from django.db import models
 from django_mysql.models import ListCharField
+from django.contrib.auth.models import User
 
 
 # Create your models here.
 
 class UserToken(models.Model):
     UserId = models.CharField(max_length=128)
+    User = models.OneToOneField(User, on_delete=models.CASCADE)
     Score = models.IntegerField()
-    Time_to_live = models.TimeField()
+    
     Passed_modules = ListCharField(
         base_field=models.CharField(max_length=11),
         size=11,
