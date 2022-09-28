@@ -47,22 +47,29 @@ def hello(request):
     User = UserToken.objects.filter(User=request.user)[0]
     button_v = "Start"
     url = "../learn"
-    message = f"Welcome user {User.User.username} to Cyber Security Python Hands On Course"
+    message = f"Welcome {User.User.username} to Cyber Security Python Hands On Course"
+   
     if len(User.Passed_modules):
         button_v = "Continue"
-        message = f"Welcome back user <br>{User.User.username}</br>"
+        message = f"Welcome back <br>{User.User.username}</br>"
+    else:
+        User.Passed_modules.append("TRAIN-01-01")
+        User.Current_Level = "TRAIN-01-01"
+        User.save()   
     data = {
         "Button_display":button_v,
         "redirect":url,
         "Message":message
 
     }
+    
     return render(request = request,
                   template_name='main/home.html',
                   context=data)
 
 def learn(request):
-    
+    User = UserToken.objects.filter(User=request.user)[0]
+
     return render(request = request,
                 template_name='main/quest.html',
                 context={"message":"Works"}
