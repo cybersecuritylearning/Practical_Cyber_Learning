@@ -68,8 +68,8 @@ def hello(request):
                   context=data)
 
 def learn(request):
-    User = UserToken.objects.filter(User=request.user)[0]
 
+    User = UserToken.objects.filter(User=request.user)[0]
     return render(request = request,
                 template_name='main/quest.html',
                 context={"message":"Works"}
