@@ -70,6 +70,8 @@ def hello(request):
 def learn(request):
 
     User = UserToken.objects.filter(User=request.user)[0]
+    current_level = User.Current_Level
+    
     return render(request = request,
                 template_name='main/quest.html',
                 context={"message":"Works"}
