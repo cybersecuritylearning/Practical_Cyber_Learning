@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
-from .models import UserToken
+from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from django.contrib import messages
@@ -53,7 +53,6 @@ def hello(request):
         button_v = "Continue"
         message = f"Welcome back <br>{User.User.username}</br>"
     else:
-        User.Passed_modules.append("TRAIN-01-01")
         User.Current_Level = "TRAIN-01-01"
         User.save()   
     data = {
@@ -72,21 +71,19 @@ def learn(request):
     User = UserToken.objects.filter(User=request.user)[0]
     current_level = User.Current_Level
     
+    __current_level_model = Learning_Modules.objects.filter(Module_name=current_level)[0]
+
     return render(request = request,
                 template_name='main/quest.html',
-                context={"message":"Works"}
+                context={"message":__current_level_model.Module_message}
             )
 
 def run_simple_python(request):
     
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
     modules_to_load = []
-    
-    user_token = request.META.get("HTTP_USERT")
-    if not user_token:
-        return HttpResponse(MESSAGES.TOKEN_NOT_PRESENT,status=403)
-
-    User = UserToken.objects.filter(UserId=user_token)
+   
+    User = UserToken.objects.filter(User=request.user)[0]
 
     if not User:
         return HttpResponse(MESSAGES.NOT_REGISTERED)
@@ -94,6 +91,7 @@ def run_simple_python(request):
     User_data = User.values()[0]
 
     sys.path.append(simple_modules_path)
+
     for module_file in glob.glob(simple_modules_path + "*.py"):
         modules_to_load.append(os.path.basename(module_file)[:-3])
 
@@ -102,17 +100,13 @@ def run_simple_python(request):
     for module in modules_to_load:
         _mod = import_module(module)
         _cls = getattr(_mod,module.upper())
-        if _cls.TRAIN_ID not in User_data['Passed_modules']:
-            modules_instances.append(_cls)
+        if _cls.TRAIN_ID == User.Current_Level:
+            data = _cls.process(User)
 
-    for _mod_inst in modules_instances:
-        if request.method == _mod_inst.REQUEST_METHOD_SUPPORTED:
-            _mod_obj = _mod_inst(request)
-            result = _mod_obj.process(User_data)
-            response = result['Data']
+   
                 
     
-    return HttpResponse(response)
+    return HttpResponse(data['Data'])
 
 def register(request):
     if request.method =="POST":
