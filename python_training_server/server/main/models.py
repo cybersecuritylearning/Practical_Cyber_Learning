@@ -10,7 +10,8 @@ class UserToken(models.Model):
     User = models.OneToOneField(User, on_delete=models.CASCADE)
     Score = models.IntegerField()
     Current_Level = models.CharField(max_length=128)
-    
+    Hash_check = models.CharField(max_length=32)
+
     Passed_modules = ListCharField(
         base_field=models.CharField(max_length=11),
         size=11,

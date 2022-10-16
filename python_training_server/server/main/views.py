@@ -47,11 +47,14 @@ def hello(request):
     User = UserToken.objects.filter(User=request.user)[0]
     button_v = "Start"
     url = "../learn"
-    message = f"Welcome {User.User.username} to Cyber Security Python Hands On Course"
+    message = f"""
+            Welcome {User.User.username} to Cyber Security Python Hands On Course
+            Your key is {User.UserId} and you have to include it in your requests as
+            Usert:<key> header
+            """
    
     if len(User.Passed_modules):
         button_v = "Continue"
-        message = f"Welcome back <br>{User.User.username}</br>"
     else:
         User.Current_Level = "TRAIN-01-01"
         User.save()   
@@ -82,13 +85,15 @@ def run_simple_python(request):
     
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
     modules_to_load = []
-   
-    User = UserToken.objects.filter(User=request.user)[0]
-
-    if not User:
-        return HttpResponse(MESSAGES.NOT_REGISTERED)
+    try:
+        __user_id = request.META['HTTP_USERT']
+    except KeyError:
+        return HttpResponse("User key not set, please set UserT header",status=[401])
     
-    User_data = User.values()[0]
+    try:
+        User = UserToken.objects.filter(UserId=__user_id)[0]
+    except:
+        return HttpResponse(MESSAGES.NOT_REGISTERED)
 
     sys.path.append(simple_modules_path)
 
@@ -101,11 +106,11 @@ def run_simple_python(request):
         _mod = import_module(module)
         _cls = getattr(_mod,module.upper())
         if _cls.TRAIN_ID == User.Current_Level:
-            data = _cls.process(User)
+            try:
+                data = _cls(request).process(User)
+            except Exception as e:
+                print(str(e))
 
-   
-                
-    
     return HttpResponse(data['Data'])
 
 def register(request):
