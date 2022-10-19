@@ -1,0 +1,5 @@
+## Format
+{"TRAIN_ID":"ID","TRAIN_QUEST":"MESSAGE"}
+##
+{"TRAIN_ID":"TRAIN-01-01","TRAIN_QUEST":"Make a get request using python at /home/simple without any parameters"}
+{"TRAIN_ID":"TRAIN-01-02","TRAIN_QUEST":"Make a get request using python at /home/simple with any parameters"}

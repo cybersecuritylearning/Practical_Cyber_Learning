@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-qip$wp%937vgux4elgxp&v%!1s1pd^6c9f0stlifxt*gq5w0i0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1","192.168.110.129"]
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [

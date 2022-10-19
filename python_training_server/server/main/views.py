@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
-from .models import UserToken
+from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from django.contrib import messages
@@ -47,44 +47,56 @@ def hello(request):
     User = UserToken.objects.filter(User=request.user)[0]
     button_v = "Start"
     url = "../learn"
-    message = f"Welcome user {User.User.username} to Cyber Security Python Hands On Course"
+    message = f"""
+            Welcome {User.User.username} to Cyber Security Python Hands On Course
+            Your key is {User.UserId} and you have to include it in your requests as
+            Usert:<key> header
+            """
+   
     if len(User.Passed_modules):
         button_v = "Continue"
-        message = f"Welcome back user <br>{User.User.username}</br>"
+    else:
+        User.Current_Level = "TRAIN-01-01"
+        User.save()   
     data = {
         "Button_display":button_v,
         "redirect":url,
         "Message":message
 
     }
+    
     return render(request = request,
                   template_name='main/home.html',
                   context=data)
 
 def learn(request):
+
+    User = UserToken.objects.filter(User=request.user)[0]
+    current_level = User.Current_Level
     
+    __current_level_model = Learning_Modules.objects.filter(Module_name=current_level)[0]
+
     return render(request = request,
                 template_name='main/quest.html',
-                context={"message":"Works"}
+                context={"message":__current_level_model.Module_message}
             )
 
 def run_simple_python(request):
     
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
     modules_to_load = []
+    try:
+        __user_id = request.META['HTTP_USERT']
+    except KeyError:
+        return HttpResponse("User key not set, please set UserT header",status=[401])
     
-    user_token = request.META.get("HTTP_USERT")
-    if not user_token:
-        return HttpResponse(MESSAGES.TOKEN_NOT_PRESENT,status=403)
-
-    User = UserToken.objects.filter(UserId=user_token)
-
-    if not User:
+    try:
+        User = UserToken.objects.filter(UserId=__user_id)[0]
+    except:
         return HttpResponse(MESSAGES.NOT_REGISTERED)
-    
-    User_data = User.values()[0]
 
     sys.path.append(simple_modules_path)
+
     for module_file in glob.glob(simple_modules_path + "*.py"):
         modules_to_load.append(os.path.basename(module_file)[:-3])
 
@@ -93,17 +105,13 @@ def run_simple_python(request):
     for module in modules_to_load:
         _mod = import_module(module)
         _cls = getattr(_mod,module.upper())
-        if _cls.TRAIN_ID not in User_data['Passed_modules']:
-            modules_instances.append(_cls)
+        if _cls.TRAIN_ID == User.Current_Level:
+            try:
+                data = _cls(request).process(User)
+            except Exception as e:
+                print(str(e))
 
-    for _mod_inst in modules_instances:
-        if request.method == _mod_inst.REQUEST_METHOD_SUPPORTED:
-            _mod_obj = _mod_inst(request)
-            result = _mod_obj.process(User_data)
-            response = result['Data']
-                
-    
-    return HttpResponse(response)
+    return HttpResponse(data['Data'])
 
 def register(request):
     if request.method =="POST":
