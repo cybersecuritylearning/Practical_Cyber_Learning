@@ -71,6 +71,18 @@ def hello(request):
 
 def learn(request):
 
+    if request.method == "POST":
+        try:
+            flag = request.POST['Flag']
+            if len(flag) != 64:
+                return None
+            user = UserToken.objects.filter(Hash_check=flag)[0]
+            if not user:
+                return None
+            
+        except KeyError:
+            return None
+    
     User = UserToken.objects.filter(User=request.user)[0]
     current_level = User.Current_Level
     

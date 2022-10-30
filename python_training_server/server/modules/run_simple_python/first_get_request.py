@@ -13,16 +13,28 @@ class FIRST_GET_REQUEST:
         self.result = {"Data":"Try Harder"}
     
     def make_flag(self,user):
+        """
+        params:
+            user(object):represents the object of a user (from sql)
+        return:
+            flag(str):represents a unique flag crafted
+        """
         now = datetime.now()
         flag = sha256(f"{str(now.microsecond)}{user.UserId}".encode()).hexdigest()
         return flag
 
     def process(self,user):
+        """
+        params:
+            user(object):represents the object of a user (from sql)
+        return:
+            result(dict):represents a dictionary with the result
+        """
         if not len(self.request.GET):
-            
+            # Pass user and add the module to the passed one's list 
             if self.TRAIN_ID not in user.Passed_modules:
                 user.Passed_modules.append(self.TRAIN_ID)
-
+            # Updates user database
             flag = self.make_flag(user)
             user.Hash_check = flag
             user.save()
