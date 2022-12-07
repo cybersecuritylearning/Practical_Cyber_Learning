@@ -70,7 +70,7 @@ def hello(request):
                   context=data)
 
 def learn(request):
-
+    flag = None
     if request.method == "POST":
         try:
             flag = request.POST['Flag']
@@ -80,11 +80,19 @@ def learn(request):
             if not user:
                 return None
             
+            level_a = user.Current_Level
+            Lrmodules = Learning_Modules.objects.all()
+            
+            for module in Lrmodules.iterator():
+                if module.Module_name not in user.Passed_modules:
+                    current_level = module.Module_name
+                    break
         except KeyError:
             return None
     
-    User = UserToken.objects.filter(User=request.user)[0]
-    current_level = User.Current_Level
+    if not flag:
+        User = UserToken.objects.filter(User=request.user)[0]
+        current_level = User.Current_Level
     
     __current_level_model = Learning_Modules.objects.filter(Module_name=current_level)[0]
 
