@@ -86,6 +86,9 @@ def learn(request):
             for module in Lrmodules.iterator():
                 if module.Module_name not in user.Passed_modules:
                     current_level = module.Module_name
+                    user.Current_Level = current_level
+                    user.save()
+                    return redirect("main:Learn_page_for_users")
                     break
         except KeyError:
             return None
