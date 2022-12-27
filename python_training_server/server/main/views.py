@@ -11,6 +11,7 @@ from django.contrib import messages
 import glob,os,sys
 from datetime import datetime
 from hashlib import sha256
+import json
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -88,8 +89,15 @@ def learn(request):
                     current_level = module.Module_name
                     user.Current_Level = current_level
                     user.save()
-                    return redirect("main:Learn_page_for_users")
-                    break
+                    
+                    response_data = {}
+                    response_data['quest'] = module.Module_message
+                    
+                    return HttpResponse(
+                        json.dumps(response_data),
+                        content_type="application/json"
+                    ) 
+
         except KeyError:
             return None
     
