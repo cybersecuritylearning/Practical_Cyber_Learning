@@ -30,6 +30,11 @@ class FIRST_GET_REQUEST:
         return:
             result(dict):represents a dictionary with the result
         """
+
+        if not "python" in self.request.META['HTTP_USER_AGENT']:
+            self.result["Data"] ="You have to use python!!"
+            return self.result
+
         if not len(self.request.GET):
             # Pass user and add the module to the passed one's list 
             if self.TRAIN_ID not in user.Passed_modules:
