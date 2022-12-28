@@ -14,9 +14,15 @@
                 data: {
                   'Flag': flag_input.value // from form
                 },
+                success:function(json){
+                  $("#flag").val('');
+                  $("#quest_message").text(json.quest);
+                }
+              
         });
           } catch(err) {
             console.error(`Error: ${err}`);
           }
+        
     });
 
