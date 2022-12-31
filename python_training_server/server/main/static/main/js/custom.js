@@ -17,6 +17,7 @@
                 success:function(json){
                   $("#flag").val('');
                   $("#quest_message").text(json.quest);
+                  $("#quest_tip").text(json.tips);
                 }
               
         });
