@@ -92,6 +92,7 @@ def learn(request):
                     
                     response_data = {}
                     response_data['quest'] = module.Module_message
+                    response_data['tips'] = module.Module_tips
                     
                     return HttpResponse(
                         json.dumps(response_data),
@@ -101,15 +102,17 @@ def learn(request):
         except KeyError:
             return None
     
-    if not flag:
-        User = UserToken.objects.filter(User=request.user)[0]
-        current_level = User.Current_Level
+    
+    User = UserToken.objects.filter(User=request.user)[0]
+    current_level = User.Current_Level
     
     __current_level_model = Learning_Modules.objects.filter(Module_name=current_level)[0]
 
     return render(request = request,
                 template_name='main/quest.html',
-                context={"message":__current_level_model.Module_message,"tip":__current_level_model.Module_tips}
+                context={"message":__current_level_model.Module_message,
+                        "tip":__current_level_model.Module_tips,
+                        "api_key_here":User.UserId}
             )
 
 def run_simple_python(request):
