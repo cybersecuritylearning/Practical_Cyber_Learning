@@ -109,7 +109,7 @@ def learn(request):
 
     return render(request = request,
                 template_name='main/quest.html',
-                context={"message":__current_level_model.Module_message}
+                context={"message":__current_level_model.Module_message,"tip":__current_level_model.Module_tips}
             )
 
 def run_simple_python(request):

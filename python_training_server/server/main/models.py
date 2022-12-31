@@ -25,6 +25,7 @@ def __str__(self):
 class Learning_Modules(models.Model):
     Module_name = models.CharField(max_length=128)
     Module_message = models.TextField(blank=True)
+    Module_tips = models.TextField(blank=True)
 
 def __str__(self):
     return self.Module_name
