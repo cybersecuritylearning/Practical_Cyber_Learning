@@ -15,7 +15,7 @@
                   'Flag': flag_input.value // from form
                 },
                 success:function(json){
-                  M.toast({html: 'Great Job!', classes: 'green rounded', displayLength:2000});
+                  M.toast({html: 'Great Job!', classes: 'green rounded'});
                   $("#flag").val('');
                   $("#quest_message").html(json.quest);
                   $("#quest_tip").html(json.tips);
