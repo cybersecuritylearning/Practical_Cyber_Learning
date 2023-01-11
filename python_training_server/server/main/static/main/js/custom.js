@@ -15,9 +15,10 @@
                   'Flag': flag_input.value // from form
                 },
                 success:function(json){
+                  M.toast({html: 'Great Job!', classes: 'green rounded', displayLength:2000});
                   $("#flag").val('');
-                  $("#quest_message").text(json.quest);
-                  $("#quest_tip").text(json.tips);
+                  $("#quest_message").html(json.quest);
+                  $("#quest_tip").html(json.tips);
                 }
               
         });
