@@ -5,6 +5,17 @@
         <li>{{api_key_here}}</li>
         <!-- <li><a href="badges.html">Components</a></li>
         <li class="active"><a href="collapsible.html">JavaScript</a></li> -->
+
+      </ul>
+      <ul class="left hide-on-med-and-down">
+        {% if user.is_authenticated %}
+          <li><a href="/home/account">{{user.username|title}}</a></li>
+          <li><a href="/home/logout">Logout</a></li>
+     {% else %}
+         <li><a href="/home/login">Login</a></li>
+         <li><a href="/home/register">Register</a></li>
+     {% endif %}
+
       </ul>
     </div>
   </nav>

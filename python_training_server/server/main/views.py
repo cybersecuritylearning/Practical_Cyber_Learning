@@ -21,7 +21,7 @@ PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 def logout_request(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect("main:hello_page")
+    return redirect("main:login_page")
 
 def login_request(request):
     if request.method == 'POST':
@@ -47,7 +47,7 @@ def hello(request):
     
     User = UserToken.objects.filter(User=request.user)[0]
     button_v = "Start"
-    url = "../learn"
+    url = "/home/learn"
     message = f"""
             Welcome {User.User.username} to Cyber Security Python Hands On Course
             Your key is {User.UserId} and you have to include it in your requests as
@@ -163,10 +163,15 @@ def register(request):
                 User_data.Score = 0 
                 User_data.UserId = user_token
                 User_data.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, f"New account created: {username}")
             except Exception as e:
                 print(str(e))
                 return HttpResponse(MESSAGES.REGISTER_ERROR)
             return redirect("main:hello_page")
+        else:
+            for msg in form.error_messages:
+                messages.error(request, f"{msg}: {form.error_messages[msg]}")
 
     form = NewUserForm
     return render(request=request, 
