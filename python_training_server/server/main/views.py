@@ -7,11 +7,13 @@ from django.contrib.auth.models import User
 from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
+from .core.utils import dec_number_from_name, inc_number_from_name
 from django.contrib import messages
 import glob,os,sys
 from datetime import datetime
 from hashlib import sha256
 import json
+
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -177,3 +179,45 @@ def register(request):
     return render(request=request, 
                 template_name="main/register.html",
                 context={"form":form})
+
+
+
+def move(request):
+    """Module which handles modules movement"""
+    user = UserToken.objects.filter(User=request.user)[0]
+    current_level = user.Current_Level
+
+    try:
+        if request.GET['pos'] == "prev":
+            level_decrement = dec_number_from_name(current_level)
+            module = Learning_Modules.objects.filter(Module_name=level_decrement)[0]
+        
+        if request.GET['pos'] == "next":
+            level_increment = inc_number_from_name(current_level)
+            currently_undone_level = inc_number_from_name(user.Passed_modules[-1])
+            
+            if level_increment not in user.Passed_modules:
+                if level_increment !=currently_undone_level:
+                    return  HttpResponse(
+                        "Level not found!"
+                    )
+            module = Learning_Modules.objects.filter(Module_name=level_increment)[0]
+        
+
+        current_level = module.Module_name
+        user.Current_Level = current_level
+        user.save()
+        
+        response_data = {}
+        response_data['quest'] = module.Module_message
+        response_data['tips'] = module.Module_tips
+        
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        ) 
+
+    except Exception as e:
+        return HttpResponse(
+            "Level not found!"
+        ) 

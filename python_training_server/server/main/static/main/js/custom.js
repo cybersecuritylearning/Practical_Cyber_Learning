@@ -28,3 +28,50 @@
         
     });
 
+    const prev = document.getElementById('prev');
+    prev.addEventListener('click', async _ => {
+      try {     
+            $.ajax({
+              type: "GET",
+              url: "/home/move/",
+              mode: "same-origin",
+              data: {
+                'pos': 'prev' // from form
+              },
+              success:function(json){
+                $("#flag").val('');
+                $("#quest_message").html(json.quest);
+                $("#quest_tip").html(json.tips);
+              }
+            
+      });
+        } catch(err) {
+          console.error(`Error: ${err}`);
+        }
+      
+  });
+
+  const next = document.getElementById('next');
+  next.addEventListener('click', async _ => {
+    try {     
+          $.ajax({
+            type: "GET",
+            url: "/home/move/",
+            mode: "same-origin",
+            data: {
+              'pos': 'next' // from form
+            },
+            success:function(json){
+              $("#flag").val('');
+              $("#quest_message").html(json.quest);
+              $("#quest_tip").html(json.tips);
+            }
+          
+    });
+      } catch(err) {
+        console.error(`Error: ${err}`);
+      }
+    
+});
+
+
