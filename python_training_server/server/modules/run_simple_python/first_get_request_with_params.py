@@ -21,6 +21,11 @@ class FIRST_GET_REQUEST_WITH_PARAMS:
         return flag
 
     def process(self,user):
+
+        if self.request.method !='GET':
+            self.result["Data"] ="You've made a POST request, not a GET request!"
+            return self.result
+
         if not "python" in self.request.META['HTTP_USER_AGENT']:
             self.result["Data"] ="You have to use python!!"
             return self.result

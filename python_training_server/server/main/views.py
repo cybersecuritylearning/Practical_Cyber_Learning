@@ -1,18 +1,23 @@
-from django.shortcuts import render, redirect
 from importlib import import_module
-from django.http import HttpResponse
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import logout, authenticate, login
-from django.contrib.auth.models import User
-from .models import UserToken, Learning_Modules
-from .forms import NewUserForm
-from .core.Messages import MESSAGES 
-from .core.utils import dec_number_from_name, inc_number_from_name
-from django.contrib import messages
 import glob,os,sys
 from datetime import datetime
 from hashlib import sha256
 import json
+
+from django.http import HttpResponse
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+
+
+from .models import UserToken, Learning_Modules
+from .forms import NewUserForm
+from .core.Messages import MESSAGES 
+from .core.utils import dec_number_from_name, inc_number_from_name
+
 
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -64,7 +69,8 @@ def hello(request):
     data = {
         "Button_display":button_v,
         "redirect":url,
-        "Message":message
+        "Message":message,
+        "api_key_here":User.UserId
 
     }
     
@@ -117,6 +123,7 @@ def learn(request):
                         "api_key_here":User.UserId}
             )
 
+@csrf_exempt
 def run_simple_python(request):
     
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
