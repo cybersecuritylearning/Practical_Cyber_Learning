@@ -1,5 +1,7 @@
 ## Format
 {"TRAIN_ID":"ID","TRAIN_QUEST":"MESSAGE"}
 ##
-{"TRAIN_ID":"TRAIN-01-01","TRAIN_QUEST":"Make a get request using python at /home/simple without any parameters"}
-{"TRAIN_ID":"TRAIN-01-02","TRAIN_QUEST":"Make a get request using python at /home/simple with <b>code</b> parameter"}
+{"TRAIN_ID":"TRAIN-01-01","TRAIN_QUEST":"Make a <b>GET</b> request using python at <b>/home/simple</b> without any parameters"}
+{"TRAIN_ID":"TRAIN-01-02","TRAIN_QUEST":"Make a <b>GET</b> request using python at <b>/home/simple</b> with <b>code</b> parameter"}
+{"TRAIN_ID":"TRAIN-01-03","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> without any data"}
+{"TRAIN_ID":"TRAIN-01-04","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with code data"}

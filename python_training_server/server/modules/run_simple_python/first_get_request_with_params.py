@@ -22,7 +22,7 @@ class FIRST_GET_REQUEST_WITH_PARAMS:
 
     def process(self,user):
 
-        if self.request.method !='GET':
+        if self.request.method != self.REQUEST_METHOD_SUPPORTED:
             self.result["Data"] ="You've made a POST request, not a GET request!"
             return self.result
 
@@ -48,7 +48,7 @@ class FIRST_GET_REQUEST_WITH_PARAMS:
                         
                         """
             else:
-                self.result["Data"] = f"You need to give a paramater larger than {len(self.request.GET['code'])}"
+                self.result["Data"] = f"You need to give a paramater longer than {len(self.request.GET['code'])}"
 
         return self.result
                

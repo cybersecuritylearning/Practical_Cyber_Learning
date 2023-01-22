@@ -87,7 +87,10 @@ def learn(request):
                 return None
             user = UserToken.objects.filter(Hash_check=flag)[0]
             if not user:
-                return None
+                return HttpResponse(
+                        json.dumps({'fail':"This is not the correct flag!"}),
+                        content_type="application/json"
+                    ) 
             
             level_a = user.Current_Level
             Lrmodules = Learning_Modules.objects.all()
@@ -108,7 +111,11 @@ def learn(request):
                     ) 
 
         except KeyError:
-            return None
+            return HttpResponse(
+                        json.dumps({'fail':"Error!"}),
+                        content_type="application/json"
+                    ) 
+
     
     
     User = UserToken.objects.filter(User=request.user)[0]

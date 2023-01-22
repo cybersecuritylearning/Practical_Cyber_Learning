@@ -19,6 +19,12 @@
                   $("#flag").val('');
                   $("#quest_message").html(json.quest);
                   $("#quest_tip").html(json.tips);
+                  try {
+                    M.toast({html: json.fail, classes: 'red rounded'});
+                  }
+                  catch(err) {
+                    console.log("It's correct");
+                  }
                 }
               
         });
