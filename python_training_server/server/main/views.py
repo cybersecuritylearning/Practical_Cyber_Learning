@@ -105,6 +105,7 @@ def learn(request):
                     response_data['quest'] = module.Module_message
                     response_data['tips'] = module.Module_tips
                     
+                    
                     return HttpResponse(
                         json.dumps(response_data),
                         content_type="application/json"
