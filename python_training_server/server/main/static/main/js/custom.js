@@ -15,16 +15,22 @@
                   'Flag': flag_input.value // from form
                 },
                 success:function(json){
-                  M.toast({html: 'Great Job!', classes: 'green rounded'});
+                  
                   $("#flag").val('');
                   $("#quest_message").html(json.quest);
                   $("#quest_tip").html(json.tips);
                   try {
+                    if (json.fail){
                     M.toast({html: json.fail, classes: 'red rounded'});
+                    }
+                    else{
+                    M.toast({html: 'Great Job!', classes: 'green rounded'});  
+                    }
                   }
                   catch(err) {
                     console.log("It's correct");
                   }
+
                 }
               
         });
