@@ -230,6 +230,10 @@ def move(request):
         response_data = {}
         response_data['quest'] = module.Module_message
         response_data['tips'] = module.Module_tips
+        if current_level in user.Passed_modules:
+            response_data['done'] = MESSAGES.SOLVED
+        else:
+            response_data['done'] = ''
         
         return HttpResponse(
             json.dumps(response_data),

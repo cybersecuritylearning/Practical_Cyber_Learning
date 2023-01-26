@@ -24,7 +24,8 @@
                     M.toast({html: json.fail, classes: 'red rounded'});
                     }
                     else{
-                    M.toast({html: 'Great Job!', classes: 'green rounded'});  
+                    M.toast({html: 'Great Job!', classes: 'green rounded'});
+                      
                     }
                   }
                   catch(err) {
@@ -52,6 +53,7 @@
               },
               success:function(json){
                 $("#flag").val('');
+                $("#solved").html(json.done);
                 $("#quest_message").html(json.quest);
                 $("#quest_tip").html(json.tips);
               }
@@ -75,6 +77,7 @@
             },
             success:function(json){
               $("#flag").val('');
+              $("#solved").html(json.done);
               $("#quest_message").html(json.quest);
               $("#quest_tip").html(json.tips);
             }

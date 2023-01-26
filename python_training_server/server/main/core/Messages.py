@@ -16,3 +16,16 @@ class MESSAGES:
         An error occured at user registration.
         Please try again!
     """
+    SOLVED = """
+            <div class="center-align">
+        <div class="col s12 m6 ">
+        <div class="card green darken-1">
+            <div class="card-content white-text">
+            <span class="card-title">Solved!</span>
+            
+            </div>
+            
+        </div>
+        </div>
+    </div>
+    """
