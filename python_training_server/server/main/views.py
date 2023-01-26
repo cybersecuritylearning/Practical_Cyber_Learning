@@ -85,6 +85,7 @@ def learn(request):
             flag = request.POST['Flag']
             if len(flag) != 64:
                 return None
+            
             user = UserToken.objects.filter(Hash_check=flag)[0]
             if not user:
                 return HttpResponse(
@@ -92,6 +93,9 @@ def learn(request):
                         content_type="application/json"
                     ) 
             
+            user.Hash_check = ''
+            user.save()
+
             level_a = user.Current_Level
             Lrmodules = Learning_Modules.objects.all()
             
@@ -105,14 +109,15 @@ def learn(request):
                     response_data['quest'] = module.Module_message
                     response_data['tips'] = module.Module_tips
                     
+                    
                     return HttpResponse(
                         json.dumps(response_data),
                         content_type="application/json"
                     ) 
 
-        except KeyError:
+        except (KeyError,IndexError):
             return HttpResponse(
-                        json.dumps({'fail':"Error!"}),
+                        json.dumps({'fail':"Flag is not right, Try Harder!"}),
                         content_type="application/json"
                     ) 
 
