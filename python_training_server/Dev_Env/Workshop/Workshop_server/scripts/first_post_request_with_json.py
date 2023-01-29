@@ -34,6 +34,10 @@ class FIRST_POST_REQUEST_WITH_JSON:
             self.result["Data"] ="You've made a GET request, not a POST request!"
             return self.result
 
+        ##TO DO, in flask, headers is self.request.headers['USER-Agent']
+        ##For integrating in django main app you should change with
+        ##self.request.META['HTTP_USER_AGENT']
+
         if not "python" in self.request.META['HTTP_USER_AGENT']:
             self.result["Data"] ="You have to use python!!"
             return self.result

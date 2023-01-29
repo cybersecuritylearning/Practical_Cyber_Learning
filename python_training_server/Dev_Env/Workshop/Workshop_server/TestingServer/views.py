@@ -1,22 +1,18 @@
-from os import lseek
+from django.shortcuts import render
+from django.http import HttpResponse
+# Create your views here.
 from importlib import import_module
 import glob,os,sys
-from flask import Flask
-from flask import request
-from flask import make_response
-
-
-app = Flask(__name__)
+from django.views.decorators.csrf import csrf_exempt
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 class User:
     id = "7989b708b5320d57108631ff9f151c2fdabbc481208fd713e545475283b8df44"
 
-
-@app.route("/",methods=['GET', 'POST'])
-def runner():
-    simple_modules_path = PARENT_DIR + "/Workshop/scripts/"
+@csrf_exempt
+def runner(request):
+    simple_modules_path = PARENT_DIR + "/scripts/"
     modules_to_load = []
    
     sys.path.append(simple_modules_path)
@@ -33,12 +29,6 @@ def runner():
             data = _cls(request).process(User)
         except Exception as e:
             print(str(e))
-            return make_response(400)
-
-    response = make_response(data['Data'],200)
-    return response
     
-
-
-if __name__=='__main__':
-    app.run("0.0.0.0",8000)
+    return HttpResponse(data['Data'])
+    
