@@ -5,3 +5,4 @@
 {"TRAIN_ID":"TRAIN-01-02","TRAIN_QUEST":"Make a <b>GET</b> request using python at <b>/home/simple</b> with <b>code</b> parameter"}
 {"TRAIN_ID":"TRAIN-01-03","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> without any data"}
 {"TRAIN_ID":"TRAIN-01-04","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with code data"}
+{"TRAIN_ID":"TRAIN-01-05","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with some JSON data. \nThe request must include the following parameters:\n- <b>name</b> - your name;\n- <b>username</b> - your username;\n- <b>age</b> - your age"}
