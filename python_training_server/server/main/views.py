@@ -13,16 +13,13 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-
 from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
-from .core.utils import dec_number_from_name, inc_number_from_name, super_user_upgrade
-
+from .core.utils import dec_number_from_name, inc_number_from_name, init_userToken
 
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
 
 # Create your views here.
 
@@ -56,10 +53,7 @@ def hello(request):
     try:
         User = UserToken.objects.filter(User=request.user)[0]
     except IndexError as e:
-        if request.user.is_superuser:
-            User=super_user_upgrade(request)
-
-
+        User=init_userToken(request)
 
     button_v = "Start"
     url = "/home/learn"

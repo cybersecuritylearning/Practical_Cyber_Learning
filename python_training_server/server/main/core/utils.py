@@ -39,7 +39,7 @@ def inc_number_from_name(number):
     return number
   
 
-def super_user_upgrade(request):
+def init_userToken(request):
     User_data = UserToken()
 
     now = datetime.now()
