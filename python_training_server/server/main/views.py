@@ -1,5 +1,6 @@
 from importlib import import_module
 import glob,os,sys
+import re
 from datetime import datetime
 from hashlib import sha256
 import json
@@ -16,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
-from .core.utils import dec_number_from_name, inc_number_from_name
+from .core.utils import dec_number_from_name, inc_number_from_name, super_user_upgrade
 
 
 
@@ -52,7 +53,14 @@ def login_request(request):
 
 def hello(request):
     
-    User = UserToken.objects.filter(User=request.user)[0]
+    try:
+        User = UserToken.objects.filter(User=request.user)[0]
+    except IndexError as e:
+        if request.user.is_superuser:
+            User=super_user_upgrade(request)
+
+
+
     button_v = "Start"
     url = "/home/learn"
     message = f"""
@@ -178,7 +186,6 @@ def register(request):
             user_token = sha256(str(now.microsecond).encode()).hexdigest()
             user_obj = User.objects.get(username=form.cleaned_data.get("username"))
             try:
-                
                 User_data = UserToken()
                 User_data.User = user
                 User_data.Score = 0 
@@ -213,13 +220,16 @@ def move(request):
         
         if request.GET['pos'] == "next":
             level_increment = inc_number_from_name(current_level)
-            currently_undone_level = inc_number_from_name(user.Passed_modules[-1])
-            
-            if level_increment not in user.Passed_modules:
-                if level_increment !=currently_undone_level:
-                    return  HttpResponse(
-                        "Level not found!"
-                    )
+
+            if not user.User.is_superuser:
+                currently_undone_level = inc_number_from_name(user.Passed_modules[-1])
+
+                if level_increment not in user.Passed_modules:
+                    if (level_increment !=currently_undone_level):
+                        return  HttpResponse(
+                            "Level not found!"
+                        )
+
             module = Learning_Modules.objects.filter(Module_name=level_increment)[0]
         
 
