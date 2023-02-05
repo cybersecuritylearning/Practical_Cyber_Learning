@@ -1,0 +1,1 @@
+./manage.py runscript update_models_db --dir-policy each
