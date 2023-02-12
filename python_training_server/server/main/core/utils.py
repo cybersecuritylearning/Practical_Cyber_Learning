@@ -2,6 +2,24 @@ from main.models import UserToken
 from datetime import datetime
 from hashlib import sha256
 
+import logging
+
+logging.basicConfig(filename="main/core/logging/modules.log",
+                    filemode='a',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
+
+
+class log_data:
+    @staticmethod
+    def log_info(value):
+        logging.info(f"Value is: {value}")
+    
+    @staticmethod
+    def log_debug(value):
+        logging.info(f"Error is{str(value)}")
+
 
 def dec_number_from_name(number):
     """Module which decrements by 1

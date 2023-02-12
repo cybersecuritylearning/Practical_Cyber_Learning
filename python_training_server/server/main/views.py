@@ -17,6 +17,7 @@ from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from .core.utils import dec_number_from_name, inc_number_from_name, init_userToken
+from .core.utils import log_data
 
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -160,8 +161,12 @@ def run_simple_python(request):
     modules_instances = []
     #TO DO, here we should do something
     for module in modules_to_load:
-        _mod = import_module(module)
-        _cls = getattr(_mod,module.upper())
+        try:
+            _mod = import_module(module)
+            _cls = getattr(_mod,module.upper())
+        except Exception as e:
+            log_data.log_debug(e)
+            
         if _cls.TRAIN_ID == User.Current_Level:
             try:
                 data = _cls(request).process(User)

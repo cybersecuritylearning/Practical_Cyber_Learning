@@ -6,7 +6,7 @@ def init_database():
 
     with open("sql_template/sql-template-modules","r") as modules:
         lines = modules.readlines()[3:]
-    
+  
     for line in lines:
         data = json.loads(line.strip())
         
