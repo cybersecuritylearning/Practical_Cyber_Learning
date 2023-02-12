@@ -51,6 +51,7 @@ class POST_REQUEST_WITH_JSON_DATA:
                 user.save()
 
                 self.result["Data"] = f"Good job, {data['user']}! Here's your flag: \nFlag: {flag}"
+
         
         except json.JSONDecodeError:
             self.result["Data"] = f"Please make sure you passed a valid JSON as the request data and try again :)"
