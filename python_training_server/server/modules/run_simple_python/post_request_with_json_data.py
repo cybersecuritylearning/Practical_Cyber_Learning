@@ -50,7 +50,7 @@ class POST_REQUEST_WITH_JSON_DATA:
                 user.Hash_check = flag
                 user.save()
 
-                self.result["Data"] = f"Good job, {data['user']}! Here's your flag: \nFlag: {flag}"
+                self.result["Data"] = f"Good job, {data['name']}! Here's your flag: \nFlag: {flag}"
 
         
         except json.JSONDecodeError:
