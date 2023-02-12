@@ -6,7 +6,7 @@ import json
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
-class POST_REQUEST_JSON_DATA:
+class POST_REQUEST_WITH_JSON_DATA:
     REQUEST_METHOD_SUPPORTED = "POST"
     TRAIN_ID = "TRAIN-01-05"
     def __init__(self,request):
@@ -39,14 +39,10 @@ class POST_REQUEST_JSON_DATA:
             self.result["Data"] ="You have to use python!!"
             return self.result
 
-        if not len(self.request.POST):
-            self.request["Data"] = "You didn't provide any data!"
-            return self.result
-
         try:
-            data = json.load(self.request.data)
+            data = json.loads(self.request.body.decode())
 
-            if data["username"] != user.username:
+            if data["username"] != user.User.username:
                 self.result["Data"] = "Please make sure you passed the right username and try again :)"
             else:
                 # Updates user database
@@ -54,7 +50,8 @@ class POST_REQUEST_JSON_DATA:
                 user.Hash_check = flag
                 user.save()
 
-                self.result["Data"] = f"Good job, {data['name']}! Here's your flag: \nFlag: {flag}"
+                self.result["Data"] = f"Good job, {data['user']}! Here's your flag: \nFlag: {flag}"
+
         
         except json.JSONDecodeError:
             self.result["Data"] = f"Please make sure you passed a valid JSON as the request data and try again :)"
