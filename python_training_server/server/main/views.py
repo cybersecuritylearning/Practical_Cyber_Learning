@@ -158,7 +158,7 @@ def run_simple_python(request):
         modules_to_load.append(os.path.basename(module_file)[:-3])
 
     modules_instances = []
-
+    #TO DO, here we should do something
     for module in modules_to_load:
         _mod = import_module(module)
         _cls = getattr(_mod,module.upper())
