@@ -46,12 +46,11 @@ class POST_REQUEST_WITH_JSON_DATA:
                 self.result["Data"] = "Please make sure you passed the right username and try again :)"
             else:
                 # Updates user database
+                self.result["Data"] = f"Good job, {data['name']}! Here's your flag: \nFlag: {flag}"
+                
                 flag = self.make_flag(user)
                 user.Hash_check = flag
                 user.save()
-
-                self.result["Data"] = f"Good job, {data['name']}! Here's your flag: \nFlag: {flag}"
-
         
         except json.JSONDecodeError:
             self.result["Data"] = f"Please make sure you passed a valid JSON as the request data and try again :)"
