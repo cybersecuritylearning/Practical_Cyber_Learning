@@ -3,8 +3,19 @@ from datetime import datetime
 from hashlib import sha256
 
 import logging
+import os 
 
-logging.basicConfig(filename="main/core/logging/modules.log",
+LOG_PATH = os.path.join("main/core/","logging/")
+
+if not os.path.isdir(LOG_PATH):
+    os.mkdir(LOG_PATH)
+    LOG_PATH =os.path.join(LOG_PATH,"modules.log")
+    f=open(LOG_PATH,"w")
+    f.close()
+else:
+    LOG_PATH =os.path.join(LOG_PATH,"modules.log")
+
+logging.basicConfig(filename=LOG_PATH,
                     filemode='a',
                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                     datefmt='%H:%M:%S',
