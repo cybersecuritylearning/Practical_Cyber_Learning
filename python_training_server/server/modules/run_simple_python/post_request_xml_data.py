@@ -2,7 +2,7 @@
 import os
 from hashlib import sha256
 from datetime import datetime
-import json
+import xml.etree.ElementTree as ET
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -43,24 +43,30 @@ class POST_REQUEST_XML_DATA:
             self.request["Data"] = "You didn't provide any data!"
             return self.result
 
-        ## TODO!
+        try:
+            root = ET.fromstring(xml_data)
 
-                # Updates user database
-                    flag = self.make_flag(user)
-                    user.Hash_check = flag
-                    user.save()
+            for item in root.findall("item"):
+                name = item.find("name").text
+                username = item.find("username").text
+                age = item.find("age").text
+    
 
-                    self.result["Data"] = f"""
-                            
-                                Great Job!
-                            You can proceed!
-                            Flag:{flag}
-                            
-                            """
+            if username != user.User.username:
+                self.result["Data"] = "Please make sure you passed the right username and try again :)"
             else:
-                self.result["Data"] = f"You need to give a paramater longer than {len(self.request.POST['code'])}"
-        else:
-            self.result["Data"] = f"You didn't provide code data key!"
-        
-        return self.result
+                # Updates user database
+                flag = self.make_flag(user)
+                self.result["Data"] = f"Good job, {name}! Here's your flag: \nFlag: {flag}"
+                user.Hash_check = flag
 
+                if self.TRAIN_ID not in user.Passed_modules:
+                    user.Passed_modules.append(self.TRAIN_ID)
+                    
+                user.save()
+        
+        except Exception as e:
+            log_data.log_debug(e)
+            self.result["Data"] = f"Please make sure you passed a valid XML as the request data and try again :)"
+
+    return self.result
