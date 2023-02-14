@@ -8,7 +8,7 @@ from main.core.utils import log_data
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 class POST_REQUEST_XML_DATA:
-    REQUEST_METHOD_SUPPORTED = "POST"
+    REQUEST_METHOD_SUPPORTED = ["GET","POST"]
     TRAIN_ID = "TRAIN-01-07"
     def __init__(self,request):
         self.request = request
