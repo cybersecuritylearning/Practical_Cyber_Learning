@@ -3,6 +3,7 @@ import os
 from hashlib import sha256
 from datetime import datetime
 import xml.etree.ElementTree as ET
+from main.core.utils import log_data
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -39,17 +40,16 @@ class POST_REQUEST_XML_DATA:
             self.result["Data"] ="You have to use python!!"
             return self.result
 
-        if not len(self.request.POST):
+        if not len(self.request.body.decode()):
             self.request["Data"] = "You didn't provide any data!"
             return self.result
 
         try:
-            root = ET.fromstring(xml_data)
+            root = ET.fromstring(self.request.body.decode())
 
             for item in root.findall("item"):
                 name = item.find("name").text
                 username = item.find("username").text
-                age = item.find("age").text
     
 
             if username != user.User.username:
@@ -69,4 +69,4 @@ class POST_REQUEST_XML_DATA:
             log_data.log_debug(e)
             self.result["Data"] = f"Please make sure you passed a valid XML as the request data and try again :)"
 
-    return self.result
+        return self.result
