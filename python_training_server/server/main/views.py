@@ -55,6 +55,8 @@ def hello(request):
         User = UserToken.objects.filter(User=request.user)[0]
     except IndexError as e:
         User=init_userToken(request)
+    except TypeError as e:
+        return redirect("main:login_page")
 
     button_v = "Start"
     url = "/home/learn"
