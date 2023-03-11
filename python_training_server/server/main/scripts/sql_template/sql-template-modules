@@ -1,10 +1,11 @@
 ## Format
-{"TRAIN_ID":"ID","TRAIN_QUEST":"MESSAGE"}
+{"TRAIN_ID":"ID","TRAIN_QUEST":"MESSAGE","MODULE_TYPE"}
 ##
-{"TRAIN_ID":"TRAIN-01-01","TRAIN_QUEST":"Make a <b>GET</b> request using python at <b>/home/simple</b> without any parameters"}
-{"TRAIN_ID":"TRAIN-01-02","TRAIN_QUEST":"Make a <b>GET</b> request using python at <b>/home/simple</b> with <b>code</b> parameter"}
-{"TRAIN_ID":"TRAIN-01-03","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> without any data"}
-{"TRAIN_ID":"TRAIN-01-04","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with code data"}
-{"TRAIN_ID":"TRAIN-01-05","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with some JSON data. \nThe request must include the following parameters:\n- <b>name</b> - your name;\n- <b>username</b> - your username;\n- <b>age</b> - your age"}
-{"TRAIN_ID":"TRAIN-01-06","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with some XML data. \nThe request must include the following parameters:\n- <b>name</b> - your name;\n- <b>username</b> - your username;\n- <b>age</b> - your age. The root of the XML data will be <b>data</b> and the tag for the elements will be <b>item</b>"}
-{"TRAIN_ID":"TRAIN-01-07","TRAIN_QUEST":"Attempt to find the flag by making a request using python at <b>/home/simple</b>."}
+{"TRAIN_ID":"TRAIN-01-01","TRAIN_QUEST":"Make a <b>GET</b> request using python at <b>/home/simple</b> without any parameters","MODULE_TYPE":"TRAIN"}
+{"TRAIN_ID":"TRAIN-01-02","TRAIN_QUEST":"Make a <b>GET</b> request using python at <b>/home/simple</b> with <b>code</b> parameter","MODULE_TYPE":"TRAIN"}
+{"TRAIN_ID":"TRAIN-01-03","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> without any data","MODULE_TYPE":"TRAIN"}
+{"TRAIN_ID":"TRAIN-01-04","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with code data","MODULE_TYPE":"TRAIN"}
+{"TRAIN_ID":"TRAIN-01-05","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with some JSON data. \nThe request must include the following parameters:\n- <b>name</b> - your name;\n- <b>username</b> - your username;\n- <b>age</b> - your age","MODULE_TYPE":"TRAIN"}
+{"TRAIN_ID":"TRAIN-01-06","TRAIN_QUEST":"Make a <b>POST</b> request using python at <b>/home/simple</b> with some XML data. \nThe request must include the following parameters:\n- <b>name</b> - your name;\n- <b>username</b> - your username;\n- <b>age</b> - your age. The root of the XML data will be <b>data</b> and the tag for the elements will be <b>item</b>","MODULE_TYPE":"TRAIN"}
+{"TRAIN_ID":"TRAIN-01-07","TRAIN_QUEST":"Attempt to find the flag by making a request using python at <b>/home/simple</b>.","MODULE_TYPE":"TRAIN"}
+{"TRAIN_ID":"TRAIN-01-08","TRAIN_QUEST":"Now, we'll implement our first Exploit Proof of Concept. Target <b>PLACEHOLDER</b> is vulnerable to <b>CVE-2021-41773</b>. Try to read flag.txt from /tmp/flag.txt path","MODULE_TYPE":"TRAIN_CVE"}

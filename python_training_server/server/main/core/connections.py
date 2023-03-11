@@ -1,5 +1,5 @@
 import paramiko
-from utils import log_data
+from main.core.utils import log_data
 
 class Connection:
     def __init__(self,ssh_key,url,user,port=22):

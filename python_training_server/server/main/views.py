@@ -143,7 +143,11 @@ def learn(request):
 @csrf_exempt
 def run_simple_python(request):
     
+    
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
+    cve_modules_path = PARENT_DIR + "/modules/cves_modules/"
+    modules_paths = [simple_modules_path,cve_modules_path]
+
     modules_to_load = []
     try:
         __user_id = request.META['HTTP_USERT']
@@ -157,8 +161,9 @@ def run_simple_python(request):
 
     sys.path.append(simple_modules_path)
 
-    for module_file in glob.glob(simple_modules_path + "*.py"):
-        modules_to_load.append(os.path.basename(module_file)[:-3])
+    for path in modules_paths:
+        for module_file in glob.glob(path + "*.py"):
+            modules_to_load.append(os.path.basename(module_file)[:-3])
 
     modules_instances = []
     #TO DO, here we should do something
