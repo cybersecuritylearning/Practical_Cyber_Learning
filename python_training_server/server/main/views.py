@@ -111,6 +111,10 @@ def learn(request):
                     user.save()
                     
                     response_data = {}
+
+                    if "TRAIN_CVE" in module.Module_type:
+                        response_data["instance"]=""
+
                     response_data['quest'] = module.Module_message
                     response_data['tips'] = module.Module_tips
                     
@@ -242,10 +246,17 @@ def move(request):
         current_level = module.Module_name
         user.Current_Level = current_level
         user.save()
+
+        
         
         response_data = {}
+        
+        if "TRAIN_CVE" in module.Module_type:
+            response_data["instance"]=""
+        
         response_data['quest'] = module.Module_message
         response_data['tips'] = module.Module_tips
+        
         if current_level in user.Passed_modules:
             response_data['done'] = MESSAGES.SOLVED
         else:
