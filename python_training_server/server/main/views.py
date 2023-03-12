@@ -17,8 +17,8 @@ from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from .core.utils import dec_number_from_name, inc_number_from_name, init_userToken
-from .core.utils import log_data
-
+from .core.utils import log_data, CVEsAndServers
+from .core.connections import Connection
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -113,6 +113,9 @@ def learn(request):
                     response_data = {}
 
                     if "TRAIN_CVE" in module.Module_type:
+                        server_ip = CVEsAndServers.get_server()
+                        connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                        connection.check_available_port(1234)
                         response_data["instance"]=""
 
                     response_data['quest'] = module.Module_message
