@@ -3,7 +3,7 @@ import glob,os,sys
 import re
 from datetime import datetime
 from hashlib import sha256
-import json
+import json, random
 
 from django.http import HttpResponse
 from django.contrib.auth.forms import AuthenticationForm
@@ -17,7 +17,7 @@ from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from .core.utils import dec_number_from_name, inc_number_from_name, init_userToken
-from .core.utils import log_data, CVEsAndServers
+from .core.utils import CVEsAndServers
 from .core.connections import Connection
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -115,7 +115,8 @@ def learn(request):
                     if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server()
                         connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
-                        connection.check_available_port(1234)
+
+                        port = connection.get_available_port()
                         response_data["instance"]=""
 
                     response_data['quest'] = module.Module_message
@@ -255,7 +256,10 @@ def move(request):
         response_data = {}
         
         if "TRAIN_CVE" in module.Module_type:
-            response_data["instance"]=""
+                        server_ip = CVEsAndServers.get_server()
+                        connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                        connection.check_available_port(1234)
+                        response_data["instance"]=""
         
         response_data['quest'] = module.Module_message
         response_data['tips'] = module.Module_tips

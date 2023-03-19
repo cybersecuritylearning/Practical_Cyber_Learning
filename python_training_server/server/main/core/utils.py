@@ -2,7 +2,7 @@ from main.models import UserToken
 from datetime import datetime
 from hashlib import sha256
 import json
-from .connections import Connection
+
 
 import logging
 import os 
@@ -85,14 +85,16 @@ def init_userToken(request):
     return User_data
 
 class CVEsAndServers:
-     @staticmethod
-     def get_server(CVE):
-        servers_and_cves = os.path.join(PATH_CVES_SERVERS,"servers_cves")
+    @staticmethod
+    def get_server(CVE):
+       servers_and_cves = os.path.join(PATH_CVES_SERVERS,"servers_cves")
         
-        with open(servers_and_cves,"r") as file:
-            servers = file.readlines()[3:]
+       with open(servers_and_cves,"r") as file:
+           servers = file.readlines()[3:]
         
-        for server in servers:
-            server = json.loads(server)
-            if server['CVE_NUMBER'] == CVE:
-                return server["SERVER"]
+       for server in servers:
+           server = json.loads(server)
+           if server['CVE_NUMBER'] == CVE:
+               return server["SERVER"]
+    
+    

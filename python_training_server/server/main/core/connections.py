@@ -1,5 +1,6 @@
 import paramiko
 from main.core.utils import log_data
+import random
 
 class Connection:
     def __init__(self,ssh_key,url,user,port=22):
@@ -29,11 +30,12 @@ class Connection:
             log_data.log_debug(exp)
             return False
 
-    def check_available_port(self,port):
+    def get_available_port(self,port):
         try:
-            breakpoint()
+            
             used_ports = self.exec_command("netstat -tulnp | awk -F \" \" '{printf(\"%s\n\",$4)}' | awk -F \":\" '{printf(\"%s\n\",$2)}'| sort -u")[1].read()   
             print(used_ports)
+            
             return True
         except Exception as e:
             log_data.log_debug(e)
