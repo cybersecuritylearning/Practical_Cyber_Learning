@@ -113,7 +113,7 @@ def learn(request):
                     response_data = {}
 
                     if "TRAIN_CVE" in module.Module_type:
-                        server_ip = CVEsAndServers.get_server()
+                        server_ip = CVEsAndServers.get_server(module.CVE_number)
                         connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
 
                         port = connection.get_available_port()
@@ -256,7 +256,7 @@ def move(request):
         response_data = {}
         
         if "TRAIN_CVE" in module.Module_type:
-                        server_ip = CVEsAndServers.get_server()
+                        server_ip = CVEsAndServers.get_server(module.CVE_number)
                         connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
                         connection.check_available_port(1234)
                         response_data["instance"]=""
