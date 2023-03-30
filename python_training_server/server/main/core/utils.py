@@ -8,7 +8,7 @@ import logging
 import os 
 
 LOG_PATH = os.path.join("main/core/","logging/")
-PATH_CVES_SERVERS = "main/code/"
+PATH_CVES_SERVERS = "main/core/"
 
 if not os.path.isdir(LOG_PATH):
     os.mkdir(LOG_PATH)

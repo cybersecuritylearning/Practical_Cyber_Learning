@@ -258,8 +258,9 @@ def move(request):
         if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
                         connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
-                        connection.check_available_port(1234)
-                        response_data["instance"]=""
+                        connection.make_connection()
+                        port = connection.get_available_port()
+                        response_data["instance"]=f"{server_ip}:{port}"
         
         response_data['quest'] = module.Module_message
         response_data['tips'] = module.Module_tips

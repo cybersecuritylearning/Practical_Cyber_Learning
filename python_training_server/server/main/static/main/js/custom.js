@@ -1,4 +1,6 @@
 
+  
+    
     const button = document.getElementById('Flag-btn');
     var flag_input = document.getElementById('flag');
 
@@ -56,6 +58,7 @@
                 $("#solved").html(json.done);
                 $("#quest_message").html(json.quest);
                 $("#quest_tip").html(json.tips);
+                window.location.reload(true);
               }
             
       });
@@ -80,6 +83,7 @@
               $("#solved").html(json.done);
               $("#quest_message").html(json.quest);
               $("#quest_tip").html(json.tips);
+              window.location.reload(true);
             }
           
     });
