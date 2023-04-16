@@ -250,10 +250,8 @@ def move(request):
         current_level = module.Module_name
         user.Current_Level = current_level
         user.save()
-
         
-        
-        response_data = {}
+        response_data = {"instance":""}
         
         if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
