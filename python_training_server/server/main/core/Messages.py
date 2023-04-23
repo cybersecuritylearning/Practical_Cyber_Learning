@@ -29,3 +29,16 @@ class MESSAGES:
         </div>
     </div>
     """
+    INSTANCE ="""
+            <div class="center-align">
+        <div class="col s12 m6 ">
+        <div class="card blue-grey darken-1">
+            
+            <div class="card-content white-text card-action">
+            <a href="#"> <<PLACEHOLDER>></a>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+    """

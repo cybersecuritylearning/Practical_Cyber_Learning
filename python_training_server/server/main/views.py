@@ -1,3 +1,4 @@
+from http import server
 from importlib import import_module
 import glob,os,sys
 import re
@@ -258,7 +259,7 @@ def move(request):
                         connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
                         connection.make_connection()
                         port = connection.get_available_port()
-                        response_data["instance"]=f"{server_ip}:{port}"
+                        response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
         
         response_data['quest'] = module.Module_message
         response_data['tips'] = module.Module_tips

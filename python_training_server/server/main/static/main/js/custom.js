@@ -89,6 +89,7 @@
               $("#quest_tip").html(json.tips);
               $("#docker_start").html(json.instance);
             }
+            
           
     });
 
@@ -97,5 +98,3 @@
       }
     
 });
-
-
