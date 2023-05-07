@@ -5,6 +5,7 @@ import re
 from datetime import datetime
 from hashlib import sha256
 import json, random
+import logging
 
 from django.http import HttpResponse
 from django.contrib.auth.forms import AuthenticationForm
@@ -14,6 +15,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
+
 from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
@@ -22,6 +24,8 @@ from .core.utils import CVEsAndServers
 from .core.connections import Connection
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -151,11 +155,12 @@ def learn(request):
 
 @csrf_exempt
 def run_simple_python(request):
-    
+    """It handles python simple requests to the simple traying endpoints
+    If a user makes requests with python or curl this is called
+    """
     
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
-    cve_modules_path = PARENT_DIR + "/modules/cves_modules/"
-    modules_paths = [simple_modules_path,cve_modules_path]
+    modules_paths = [simple_modules_path]
 
     modules_to_load = []
     try:
@@ -181,14 +186,16 @@ def run_simple_python(request):
             _mod = import_module(module)
             _cls = getattr(_mod,module.upper())
         except Exception as e:
-            log_data.log_debug(e)
-            
+            #log_data.log_debug(e)
+            print(str(e))
         if _cls.TRAIN_ID == User.Current_Level:
             try:
                 data = _cls(request).process(User)
             except Exception as e:
                 print(str(e))
 
+    sys.path.pop()
+    
     return HttpResponse(data['Data'])
 
 def register(request):
@@ -280,5 +287,34 @@ def move(request):
         ) 
 
 def docker(request):
-    data = request.POST["con_data"]
+    """It loads cve modules and it's called when a user
+    press the start button for the instance
+    """
+    cve_modules_path = PARENT_DIR + "/modules/cves_modules/"
+    sys.path.append(cve_modules_path)
+
+    try:
+        data = request.POST["con_data"]
+        User = UserToken.objects.filter(User=request.user)[0]
+        Module = Learning_Modules.objects.filter(Module_name=User.Current_Level)[0]
+        cve_num = Module.CVE_number.lower()
+        
+        cve_num = cve_num.split("-")
+        cve_num = f"cve_{cve_num[1]}_{cve_num[2]}"
+            
+        modules_to_load = []    
+        for module_file in glob.glob(cve_modules_path + "*.py"):
+            if cve_num in module_file:
+                modules_to_load.append(os.path.basename(module_file)[:-3])
+
+        for module in modules_to_load:
+            try:
+                _mod = import_module(module)
+                _cls = getattr(_mod,module.upper())
+            except Exception as e:
+                #log_data.log_debug(e)
+                print(str(e))
+        
+    except Exception as e:
+        logger.error(str(e))
     return 
