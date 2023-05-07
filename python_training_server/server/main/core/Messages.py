@@ -30,15 +30,15 @@ class MESSAGES:
     </div>
     """
     INSTANCE ="""
-            <div class="center-align">
+        <div class="center-align">
         <div class="col s12 m6 ">
         <div class="card blue-grey darken-1">
-            
             <div class="card-content white-text card-action">
-            <a href="#"> <<PLACEHOLDER>></a>
+            <button class="btn waves-effect waves-light" type="submit" name="action" id="Instance-btn">PLACEHOLDER</button>
+            <input type="hidden" value="PLACEHOLDER"/ id="Instance-input">
             </div>
-            
         </div>
         </div>
     </div>
+    <script type="text/javascript" src='/static/main/js/start_docker_inst.js' defer></script>
     """

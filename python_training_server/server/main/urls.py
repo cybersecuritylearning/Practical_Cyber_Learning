@@ -15,5 +15,6 @@ urlpatterns = [
     path("move/",views.move, name="Change_quest"),
     path("register/",views.register, name="Registration"),
     path("logout", views.logout_request, name="logout"),
-    path("login",views.login_request,name="login_page")
+    path("login",views.login_request,name="login_page"),
+    path("docker/", views.docker, name="docker_start")
 ]
