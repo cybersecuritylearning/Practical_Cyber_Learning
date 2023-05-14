@@ -294,7 +294,7 @@ def docker(request):
     sys.path.append(cve_modules_path)
 
     try:
-        data = request.POST["con_data"]
+       
         User = UserToken.objects.filter(User=request.user)[0]
         Module = Learning_Modules.objects.filter(Module_name=User.Current_Level)[0]
         cve_num = Module.CVE_number.lower()
@@ -314,7 +314,11 @@ def docker(request):
             except Exception as e:
                 #log_data.log_debug(e)
                 print(str(e))
-        
+            try:
+                data = _cls(request).process(User)
+            except Exception as e:
+                print(str(e))
+
     except Exception as e:
         logger.error(str(e))
     return 
