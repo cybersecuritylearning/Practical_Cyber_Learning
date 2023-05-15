@@ -45,9 +45,7 @@ class CVE_2021_41773:
         """
         flag_file = f"/tmp/{uuid.uuid4()}"
         self.__conn.exec_command(f"docker run --name {self.TRAIN_ID} -p {self.port}:80 --rm -d vulnerable-apache")
-        #self.__conn.exec_command(f"echo {flag}>{flag_file};docker cp {flag_file} {self.TRAIN_ID}:/tmp/flag.txt")
         self.__conn.exec_command(f'docker exec {self.TRAIN_ID} sh -c "echo {flag} > /tmp/flag.txt"')
-        #self.__conn.exec_command(f"rm {flag_file}")
         output = self.__conn.exec_command(f"docker exec {self.TRAIN_ID} cat /tmp/flag.txt")
         
         if flag == output[1].read():
