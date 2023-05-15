@@ -5,6 +5,7 @@ from main.core.connections import Connection
 import os
 from hashlib import sha256
 from datetime import datetime
+import uuid
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -42,16 +43,19 @@ class CVE_2021_41773:
         return:
             True/False(Boolean):it says if it's up or not
         """
-        self.__conn.exec_command(f"docker run --name cve_2021_41773 -p {self.port}:80 --rm -d vulnerable-apache")
-        self.__conn.exec_command(f'docker exec -it cve_2021_41773 sh -c "echo {flag} > /tmp/flag.txt"')
-        output = self.__conn.exec_command("docker exec -it cve_2021_41773 cat /tmp/flag.txt")
+        flag_file = f"/tmp/{uuid.uuid4()}"
+        self.__conn.exec_command(f"docker run --name {self.TRAIN_ID} -p {self.port}:80 --rm -d vulnerable-apache")
+        #self.__conn.exec_command(f"echo {flag}>{flag_file};docker cp {flag_file} {self.TRAIN_ID}:/tmp/flag.txt")
+        self.__conn.exec_command(f'docker exec {self.TRAIN_ID} sh -c "echo {flag} > /tmp/flag.txt"')
+        #self.__conn.exec_command(f"rm {flag_file}")
+        output = self.__conn.exec_command(f"docker exec {self.TRAIN_ID} cat /tmp/flag.txt")
         
         if flag == output[1].read():
             return True
         return False        
     
     def __stop_docker(self):
-        self.__conn.exec_command(f'docker stop cve_2021_41773')
+        self.__conn.exec_command(f'docker stop {self.TRAIN_ID}')
     
     def process(self,user):
         """
