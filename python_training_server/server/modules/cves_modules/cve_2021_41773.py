@@ -47,8 +47,10 @@ class CVE_2021_41773:
         self.__conn.exec_command(f"docker run --name {self.TRAIN_ID} -p {self.port}:80 --rm -d vulnerable-apache")
         self.__conn.exec_command(f'docker exec {self.TRAIN_ID} sh -c "echo {flag} > /tmp/flag.txt"')
         output = self.__conn.exec_command(f"docker exec {self.TRAIN_ID} cat /tmp/flag.txt")
+        read_flag = output[1].read().decode().strip()
         
-        if flag == output[1].read():
+        
+        if flag == read_flag:
             return True
         return False        
     
@@ -64,8 +66,10 @@ class CVE_2021_41773:
         """
         flag = self.make_flag(user)
         
-        self.__start_docker(flag)
-        self.__stop_docker()
+        __docker_run = self.__start_docker(flag)
+        if __docker_run:
+            user.Hash_check = flag
+            user.save()
         
         return self.result
 
