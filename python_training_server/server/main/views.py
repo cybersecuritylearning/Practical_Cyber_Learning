@@ -103,11 +103,17 @@ def learn(request):
                         content_type="application/json"
                     ) 
             
-            user.Hash_check = ''
-            user.save()
+            
 
             level_a = user.Current_Level
             Lrmodules = Learning_Modules.objects.all()
+            
+            current_module = Learning_Modules.objects.filter(Module_name=level_a)[0]
+            if current_module.Module_type == "TRAIN_CVE":
+                server_ip=CVEsAndServers.get_server(current_module.CVE_number)
+                connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                connection.make_connection()
+                connection.exec_command(f"docker stop {current_module.Module_name}")
             
             for module in Lrmodules.iterator():
                 if module.Module_name not in user.Passed_modules:
@@ -127,6 +133,8 @@ def learn(request):
                     response_data['quest'] = module.Module_message
                     response_data['tips'] = module.Module_tips
                     
+                    user.Hash_check = ''
+                    user.save()
                     
                     return HttpResponse(
                         json.dumps(response_data),
@@ -292,7 +300,8 @@ def docker(request):
     """
     cve_modules_path = PARENT_DIR + "/modules/cves_modules/"
     sys.path.append(cve_modules_path)
-
+    
+    
     try:
        
         User = UserToken.objects.filter(User=request.user)[0]
@@ -311,14 +320,11 @@ def docker(request):
             try:
                 _mod = import_module(module)
                 _cls = getattr(_mod,module.upper())
-            except Exception as e:
-                #log_data.log_debug(e)
-                print(str(e))
-            try:
                 data = _cls(request).process(User)
+                messages.success(request, f"Instance is up!")
             except Exception as e:
-                print(str(e))
-
+                messages.error(request,"Failed to start instance!")
     except Exception as e:
         logger.error(str(e))
-    return 
+    
+    return HttpResponse()

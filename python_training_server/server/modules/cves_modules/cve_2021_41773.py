@@ -70,6 +70,7 @@ class CVE_2021_41773:
         if __docker_run:
             user.Hash_check = flag
             user.save()
+            return {"Status":"Up"}
         
         return self.result
 
