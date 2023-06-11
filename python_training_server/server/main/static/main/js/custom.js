@@ -1,6 +1,6 @@
 
   
-    
+    $(document).ready(function() {
     const button = document.getElementById('Flag-btn');
     var flag_input = document.getElementById('flag');
 
@@ -98,3 +98,4 @@
       }
     
 });
+    });

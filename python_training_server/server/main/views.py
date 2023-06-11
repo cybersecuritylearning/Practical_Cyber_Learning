@@ -7,7 +7,7 @@ from hashlib import sha256
 import json, random
 import logging
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
@@ -27,6 +27,7 @@ PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 logger = logging.getLogger(__name__)
 
+response_data = {"instance":""}
 # Create your views here.
 
 def logout_request(request):
@@ -90,6 +91,7 @@ def hello(request):
 
 def learn(request):
     flag = None
+    
     if request.method == "POST":
         try:
             flag = request.POST['Flag']
@@ -102,8 +104,6 @@ def learn(request):
                         json.dumps({'fail':"This is not the correct flag!"}),
                         content_type="application/json"
                     ) 
-            
-            
 
             level_a = user.Current_Level
             Lrmodules = Learning_Modules.objects.all()
@@ -121,14 +121,14 @@ def learn(request):
                     user.Current_Level = current_level
                     user.save()
                     
-                    response_data = {}
-
                     if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
                         connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
                         connection.make_connection()
                         port = connection.get_available_port()
                         response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
+                    else:
+                        response_data["instance"]=""
 
                     response_data['quest'] = module.Module_message
                     response_data['tips'] = module.Module_tips
@@ -158,7 +158,8 @@ def learn(request):
                 template_name='main/quest.html',
                 context={"message":__current_level_model.Module_message,
                         "tip":__current_level_model.Module_tips,
-                        "api_key_here":User.UserId}
+                        "api_key_here":User.UserId,
+                        "instance":response_data["instance"]}
             )
 
 @csrf_exempt
@@ -242,11 +243,12 @@ def move(request):
     """Module which handles modules movement"""
     user = UserToken.objects.filter(User=request.user)[0]
     current_level = user.Current_Level
-
+    
     try:
         if request.GET['pos'] == "prev":
             level_decrement = dec_number_from_name(current_level)
             module = Learning_Modules.objects.filter(Module_name=level_decrement)[0]
+    
         
         if request.GET['pos'] == "next":
             level_increment = inc_number_from_name(current_level)
@@ -267,14 +269,14 @@ def move(request):
         user.Current_Level = current_level
         user.save()
         
-        response_data = {"instance":""}
-        
         if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
                         connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
                         connection.make_connection()
                         port = connection.get_available_port()
                         response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
+        else:
+            response_data["instance"]=""
         
         response_data['quest'] = module.Module_message
         response_data['tips'] = module.Module_tips
@@ -321,10 +323,10 @@ def docker(request):
                 _mod = import_module(module)
                 _cls = getattr(_mod,module.upper())
                 data = _cls(request).process(User)
-                messages.success(request, f"Instance is up!")
+                status = "Instance is up!"
             except Exception as e:
-                messages.error(request,"Failed to start instance!")
+                status = "Failed to start instance!"
     except Exception as e:
         logger.error(str(e))
     
-    return HttpResponse()
+    return JsonResponse({'status': status})

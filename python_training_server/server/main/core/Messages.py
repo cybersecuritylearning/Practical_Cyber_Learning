@@ -40,5 +40,5 @@ class MESSAGES:
         </div>
         </div>
     </div>
-    <script type="text/javascript" src='/static/main/js/start_docker_inst.js' defer></script>
+    <script type="text/javascript" src='/static/main/js/start_docker_inst.js' ></script>
     """
