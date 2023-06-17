@@ -104,7 +104,8 @@ def learn(request):
                         json.dumps({'fail':"This is not the correct flag!"}),
                         content_type="application/json"
                     ) 
-
+                
+            user.Passed_modules.append(user.Current_Level)
             level_a = user.Current_Level
             Lrmodules = Learning_Modules.objects.all()
             
@@ -118,8 +119,11 @@ def learn(request):
             for module in Lrmodules.iterator():
                 if module.Module_name not in user.Passed_modules:
                     current_level = module.Module_name
+                    message = module.Module_message
                     user.Current_Level = current_level
                     user.save()
+                    
+                    
                     
                     if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
@@ -127,10 +131,12 @@ def learn(request):
                         connection.make_connection()
                         port = connection.get_available_port()
                         response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
+                        if "PLACEHOLDER" in message:
+                            message=message.replace("PLACEHOLDER",f"{server_ip}:{port}")
                     else:
                         response_data["instance"]=""
 
-                    response_data['quest'] = module.Module_message
+                    response_data['quest'] = message
                     response_data['tips'] = module.Module_tips
                     
                     user.Hash_check = ''
@@ -264,7 +270,7 @@ def move(request):
 
             module = Learning_Modules.objects.filter(Module_name=level_increment)[0]
         
-
+        message = module.Module_message
         current_level = module.Module_name
         user.Current_Level = current_level
         user.save()
@@ -275,10 +281,12 @@ def move(request):
                         connection.make_connection()
                         port = connection.get_available_port()
                         response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
+                        if "PLACEHOLDER" in message:
+                            message=message.replace("PLACEHOLDER",f"{server_ip}:{port}")
         else:
             response_data["instance"]=""
         
-        response_data['quest'] = module.Module_message
+        response_data['quest'] = message
         response_data['tips'] = module.Module_tips
         
         if current_level in user.Passed_modules:
