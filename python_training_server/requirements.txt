@@ -88,6 +88,7 @@ diskcache==5.4.0
 distlib==0.3.6
 distro==1.8.0
 Django==3.2.19
+django-extensions==3.2.3
 django-mysql==4.10.0
 dnslib==0.9.23
 dnspython==2.3.0
