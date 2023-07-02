@@ -114,7 +114,7 @@ def learn(request):
                 server_ip=CVEsAndServers.get_server(current_module.CVE_number)
                 connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
                 connection.make_connection()
-                connection.exec_command(f"docker stop {current_module.Module_name}")
+                connection.exec_command(f"docker stop {current_module.Module_name}_{user.UserId}")
             
             for module in Lrmodules.iterator():
                 if module.Module_name not in user.Passed_modules:

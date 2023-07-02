@@ -35,7 +35,7 @@ class CVE_2021_41773:
         return flag
 
 
-    def __start_docker(self,flag):
+    def __start_docker(self,flag,user):
         """
         It starts the vulnerable docker instance
         params:
@@ -44,19 +44,16 @@ class CVE_2021_41773:
             True/False(Boolean):it says if it's up or not
         """
         flag_file = f"/tmp/{uuid.uuid4()}"
-        self.__conn.exec_command(f"docker run --name {self.TRAIN_ID} -p {self.port}:80 --rm -d vulnerable-apache")
-        self.__conn.exec_command(f'docker exec {self.TRAIN_ID} sh -c "echo {flag} > /tmp/flag.txt"')
-        output = self.__conn.exec_command(f"docker exec {self.TRAIN_ID} cat /tmp/flag.txt")
+        self.__conn.exec_command(f"docker run --name {self.TRAIN_ID}_{user.UserId} -p {self.port}:80 --rm -d vulnerable-apache")
+        self.__conn.exec_command(f'docker exec {self.TRAIN_ID}_{user.UserId} sh -c "echo {flag} > /tmp/flag.txt"')
+        output = self.__conn.exec_command(f"docker exec {self.TRAIN_ID}_{user.UserId} cat /tmp/flag.txt")
         read_flag = output[1].read().decode().strip()
         
         
         if flag == read_flag:
             return True
         return False        
-    
-    def __stop_docker(self):
-        self.__conn.exec_command(f'docker stop {self.TRAIN_ID}')
-    
+ 
     def process(self,user):
         """
         params:
@@ -66,7 +63,7 @@ class CVE_2021_41773:
         """
         flag = self.make_flag(user)
         
-        __docker_run = self.__start_docker(flag)
+        __docker_run = self.__start_docker(flag,user)
         if __docker_run:
             user.Hash_check = flag
             user.save()
