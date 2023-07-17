@@ -1,11 +1,14 @@
 from main.models import UserToken
 from datetime import datetime
 from hashlib import sha256
+import json
+
 
 import logging
 import os 
 
 LOG_PATH = os.path.join("main/core/","logging/")
+PATH_CVES_SERVERS = "main/core/"
 
 if not os.path.isdir(LOG_PATH):
     os.mkdir(LOG_PATH)
@@ -80,3 +83,18 @@ def init_userToken(request):
     User_data.save()
 
     return User_data
+
+class CVEsAndServers:
+    @staticmethod
+    def get_server(CVE):
+       servers_and_cves = os.path.join(PATH_CVES_SERVERS,"servers_cves")
+        
+       with open(servers_and_cves,"r") as file:
+           servers = file.readlines()[3:]
+        
+       for server in servers:
+           server = json.loads(server)
+           if server['CVE_NUMBER'] == CVE:
+               return server["SERVER"]
+    
+    

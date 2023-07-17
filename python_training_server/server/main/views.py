@@ -1,11 +1,13 @@
+from http import server
 from importlib import import_module
 import glob,os,sys
 import re
 from datetime import datetime
 from hashlib import sha256
-import json
+import json, random
+import logging
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
@@ -13,15 +15,19 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
+
 from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from .core.utils import dec_number_from_name, inc_number_from_name, init_userToken
-from .core.utils import log_data
-
+from .core.utils import CVEsAndServers
+from .core.connections import Connection
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
+logger = logging.getLogger(__name__)
+
+response_data = {"instance":""}
 # Create your views here.
 
 def logout_request(request):
@@ -85,6 +91,7 @@ def hello(request):
 
 def learn(request):
     flag = None
+    
     if request.method == "POST":
         try:
             flag = request.POST['Flag']
@@ -97,23 +104,43 @@ def learn(request):
                         json.dumps({'fail':"This is not the correct flag!"}),
                         content_type="application/json"
                     ) 
-            
-            user.Hash_check = ''
-            user.save()
-
+                
+            user.Passed_modules.append(user.Current_Level)
             level_a = user.Current_Level
             Lrmodules = Learning_Modules.objects.all()
+            
+            current_module = Learning_Modules.objects.filter(Module_name=level_a)[0]
+            if current_module.Module_type == "TRAIN_CVE":
+                server_ip=CVEsAndServers.get_server(current_module.CVE_number)
+                connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                connection.make_connection()
+                connection.exec_command(f"docker stop {current_module.Module_name}_{user.UserId}")
             
             for module in Lrmodules.iterator():
                 if module.Module_name not in user.Passed_modules:
                     current_level = module.Module_name
+                    message = module.Module_message
                     user.Current_Level = current_level
                     user.save()
                     
-                    response_data = {}
-                    response_data['quest'] = module.Module_message
+                    
+                    
+                    if "TRAIN_CVE" in module.Module_type:
+                        server_ip = CVEsAndServers.get_server(module.CVE_number)
+                        connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                        connection.make_connection()
+                        port = connection.get_available_port()
+                        response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
+                        if "PLACEHOLDER" in message:
+                            message=message.replace("PLACEHOLDER",f"{server_ip}:{port}")
+                    else:
+                        response_data["instance"]=""
+
+                    response_data['quest'] = message
                     response_data['tips'] = module.Module_tips
                     
+                    user.Hash_check = ''
+                    user.save()
                     
                     return HttpResponse(
                         json.dumps(response_data),
@@ -137,13 +164,19 @@ def learn(request):
                 template_name='main/quest.html',
                 context={"message":__current_level_model.Module_message,
                         "tip":__current_level_model.Module_tips,
-                        "api_key_here":User.UserId}
+                        "api_key_here":User.UserId,
+                        "instance":response_data["instance"]}
             )
 
 @csrf_exempt
 def run_simple_python(request):
+    """It handles python simple requests to the simple traying endpoints
+    If a user makes requests with python or curl this is called
+    """
     
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
+    modules_paths = [simple_modules_path]
+
     modules_to_load = []
     try:
         __user_id = request.META['HTTP_USERT']
@@ -157,8 +190,9 @@ def run_simple_python(request):
 
     sys.path.append(simple_modules_path)
 
-    for module_file in glob.glob(simple_modules_path + "*.py"):
-        modules_to_load.append(os.path.basename(module_file)[:-3])
+    for path in modules_paths:
+        for module_file in glob.glob(path + "*.py"):
+            modules_to_load.append(os.path.basename(module_file)[:-3])
 
     modules_instances = []
     #TO DO, here we should do something
@@ -167,14 +201,16 @@ def run_simple_python(request):
             _mod = import_module(module)
             _cls = getattr(_mod,module.upper())
         except Exception as e:
-            log_data.log_debug(e)
-            
+            #log_data.log_debug(e)
+            print(str(e))
         if _cls.TRAIN_ID == User.Current_Level:
             try:
                 data = _cls(request).process(User)
             except Exception as e:
                 print(str(e))
 
+    sys.path.pop()
+    
     return HttpResponse(data['Data'])
 
 def register(request):
@@ -213,11 +249,12 @@ def move(request):
     """Module which handles modules movement"""
     user = UserToken.objects.filter(User=request.user)[0]
     current_level = user.Current_Level
-
+    
     try:
         if request.GET['pos'] == "prev":
             level_decrement = dec_number_from_name(current_level)
             module = Learning_Modules.objects.filter(Module_name=level_decrement)[0]
+    
         
         if request.GET['pos'] == "next":
             level_increment = inc_number_from_name(current_level)
@@ -233,14 +270,25 @@ def move(request):
 
             module = Learning_Modules.objects.filter(Module_name=level_increment)[0]
         
-
+        message = module.Module_message
         current_level = module.Module_name
         user.Current_Level = current_level
         user.save()
         
-        response_data = {}
-        response_data['quest'] = module.Module_message
+        if "TRAIN_CVE" in module.Module_type:
+                        server_ip = CVEsAndServers.get_server(module.CVE_number)
+                        connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                        connection.make_connection()
+                        port = connection.get_available_port()
+                        response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
+                        if "PLACEHOLDER" in message:
+                            message=message.replace("PLACEHOLDER",f"{server_ip}:{port}")
+        else:
+            response_data["instance"]=""
+        
+        response_data['quest'] = message
         response_data['tips'] = module.Module_tips
+        
         if current_level in user.Passed_modules:
             response_data['done'] = MESSAGES.SOLVED
         else:
@@ -255,3 +303,38 @@ def move(request):
         return HttpResponse(
             "Level not found!"
         ) 
+
+def docker(request):
+    """It loads cve modules and it's called when a user
+    press the start button for the instance
+    """
+    cve_modules_path = PARENT_DIR + "/modules/cves_modules/"
+    sys.path.append(cve_modules_path)
+    
+    
+    try:
+       
+        User = UserToken.objects.filter(User=request.user)[0]
+        Module = Learning_Modules.objects.filter(Module_name=User.Current_Level)[0]
+        cve_num = Module.CVE_number.lower()
+        
+        cve_num = cve_num.split("-")
+        cve_num = f"cve_{cve_num[1]}_{cve_num[2]}"
+            
+        modules_to_load = []    
+        for module_file in glob.glob(cve_modules_path + "*.py"):
+            if cve_num in module_file:
+                modules_to_load.append(os.path.basename(module_file)[:-3])
+
+        for module in modules_to_load:
+            try:
+                _mod = import_module(module)
+                _cls = getattr(_mod,module.upper())
+                data = _cls(request).process(User)
+                status = "Instance is up!"
+            except Exception as e:
+                status = "Failed to start instance!"
+    except Exception as e:
+        logger.error(str(e))
+    
+    return JsonResponse({'status': status})

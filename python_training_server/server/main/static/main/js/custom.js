@@ -1,4 +1,11 @@
 
+  
+    
+    
+    $(document).ready(function() {
+    
+      
+
     const button = document.getElementById('Flag-btn');
     var flag_input = document.getElementById('flag');
 
@@ -18,15 +25,20 @@
                   
                   $("#flag").val('');
                   $("#quest_message").html(json.quest);
+                  $("#Instance-btn").html(json.instance);
                   $("#quest_tip").html(json.tips);
+                  $("#solved").html(json.done);
                   try {
                     if (json.fail){
                     M.toast({html: json.fail, classes: 'red rounded'});
                     }
                     else{
-                    M.toast({html: 'Great Job!', classes: 'green rounded'});
-                      
-                    }
+                    M.toast({html: 'Great Job!', classes: 'green rounded'});  
+                    setInterval(function() {
+                      location.reload();
+                    }, 3000);
+                  }
+                  
                   }
                   catch(err) {
                     console.log("It's correct");
@@ -43,7 +55,9 @@
 
     const prev = document.getElementById('prev');
     prev.addEventListener('click', async _ => {
-      try {     
+      try {    
+            
+            
             $.ajax({
               type: "GET",
               url: "/home/move/",
@@ -56,6 +70,7 @@
                 $("#solved").html(json.done);
                 $("#quest_message").html(json.quest);
                 $("#quest_tip").html(json.tips);
+                $("#docker_start").html(json.instance);
               }
             
       });
@@ -67,7 +82,8 @@
 
   const next = document.getElementById('next');
   next.addEventListener('click', async _ => {
-    try {     
+    try { 
+          
           $.ajax({
             type: "GET",
             url: "/home/move/",
@@ -76,17 +92,20 @@
               'pos': 'next' // from form
             },
             success:function(json){
+             
               $("#flag").val('');
               $("#solved").html(json.done);
               $("#quest_message").html(json.quest);
               $("#quest_tip").html(json.tips);
+              $("#docker_start").html(json.instance);
             }
+            
           
     });
+
       } catch(err) {
         console.error(`Error: ${err}`);
       }
     
 });
-
-
+    });
