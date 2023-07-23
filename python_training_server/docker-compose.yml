@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+ 
+    cyberpython:
+        build:
+            context: ./src/server/
+            dockerfile: ./Dockerfile
+        command: gunicorn --user www-data --workers 16 --timeout 60 --access-logfile /server/logs/gunicorn_access.log --error-logfile /server/logs/gunicorn_error.log --capture-output --log-level info --bind 0.0.0.0:8000 server.wsgi:application
+        restart: always
+        volumes:
+            - /logs/:/server/logs:rw
+            - ./src/server:/server:rw
+        depends_on:
+            - nginx_server
+            - migration
+        deploy:
+            replicas: 5
+
+    migration:
+        build:
+            context: ./src/server/
+            dockerfile: ./Dockerfile
+        command: >
+            bash -c "python manage.py makemigrations &&
+            python manage.py migrate &&
+            python manage.py collectstatic --clear --no-input"
+        volumes:
+            - ./src/server:/server:rw    
+    
+    nginx_server:
+        build:
+            context: ./src/nginx/
+            dockerfile: ./Dockerfile
+        ports:
+            - "80:80"
+        restart: always
+        volumes:
+            - /logs/:/nginx/logs:rw
+            - ./src/server/static:/static:rw
+        
