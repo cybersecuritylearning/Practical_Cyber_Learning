@@ -16,6 +16,8 @@ services:
             - migration
         deploy:
             replicas: 2
+        secrets:
+            - host_ssh_key
 
     migration:
         build:
@@ -52,4 +54,8 @@ services:
 volumes:
     static:
     postgres_data:
+
+secrets:
+    host_ssh_key:
+        file: ~/.ssh/linode
         

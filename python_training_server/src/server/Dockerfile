@@ -12,4 +12,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+RUN mkdir /.ssh && ln -s /run/secrets/host_ssh_key /.ssh/linode
+
 RUN apt-get update

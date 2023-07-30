@@ -112,7 +112,7 @@ def learn(request):
             current_module = Learning_Modules.objects.filter(Module_name=level_a)[0]
             if current_module.Module_type == "TRAIN_CVE":
                 server_ip=CVEsAndServers.get_server(current_module.CVE_number)
-                connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                connection = Connection('/.ssh/linode',server_ip,'root')
                 connection.make_connection()
                 connection.exec_command(f"docker stop {current_module.Module_name}_{user.UserId}")
             
@@ -127,7 +127,7 @@ def learn(request):
                     
                     if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
-                        connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                        connection = Connection('/.ssh/linode',server_ip,'root')
                         connection.make_connection()
                         port = connection.get_available_port()
                         response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
@@ -277,7 +277,7 @@ def move(request):
         
         if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
-                        connection = Connection('/Users/catalinfilip/.ssh/linode',server_ip,'root')
+                        connection = Connection('/.ssh/linode',server_ip,'root')
                         connection.make_connection()
                         port = connection.get_available_port()
                         response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
