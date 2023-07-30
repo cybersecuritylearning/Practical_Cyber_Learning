@@ -3,3 +3,4 @@ django-extensions==3.2.3
 django-mysql==4.11.0
 paramiko
 gunicorn
+psycopg2

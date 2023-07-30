@@ -12,6 +12,7 @@ services:
             - ./logs/:/server/logs:rw
             - ./src/server:/server:rw
         depends_on:
+            - db
             - migration
         deploy:
             replicas: 2
@@ -21,12 +22,14 @@ services:
             context: ./src/server/
             dockerfile: ./Dockerfile
         command: >
-            sh -c "python manage.py makemigrations &&
+            bash -c "python manage.py makemigrations &&
             python manage.py migrate &&
-            python manage.py collectstatic"
+            python manage.py collectstatic --noinput&&
+            ./update_modules_database.sh"
         volumes:
             - ./src/server:/server:rw    
             - static:/server/static:rw
+
     nginx_server:
         build:
             context: ./src/nginx/
@@ -39,7 +42,14 @@ services:
             - static:/static:rw
         depends_on:
             - cyberpython
-    
+    db:
+        image: postgres:13
+        volumes:
+        - postgres_data:/var/lib/postgresql/data/
+        environment:
+        - "POSTGRES_HOST_AUTH_METHOD=trust"
+
 volumes:
     static:
+    postgres_data:
         
