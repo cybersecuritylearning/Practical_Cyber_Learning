@@ -15,3 +15,8 @@ COPY . .
 RUN mkdir /.ssh && ln -s /run/secrets/host_ssh_key /.ssh/linode
 
 RUN apt-get update
+
+RUN mkdir /logs
+
+RUN mkdir /logs/django_logs
+RUN chown -R www-data:www-data /logs/django_logs 2>/tmp/err

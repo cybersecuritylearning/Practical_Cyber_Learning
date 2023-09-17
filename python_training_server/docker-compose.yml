@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
- 
+
     cyberpython:
         build:
             context: ./src/server/
@@ -24,12 +24,9 @@ services:
             context: ./src/server/
             dockerfile: ./Dockerfile
         command: >
-            bash -c "python manage.py makemigrations &&
-            python manage.py migrate &&
-            python manage.py collectstatic --noinput&&
-            ./update_modules_database.sh"
+            bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput&& ./update_modules_database.sh"
         volumes:
-            - ./src/server:/server:rw    
+            - ./src/server:/server:rw
             - static:/server/static:rw
 
     nginx_server:
@@ -47,15 +44,15 @@ services:
     db:
         image: postgres:13
         volumes:
-        - postgres_data:/var/lib/postgresql/data/
+            - postgres_data:/var/lib/postgresql/data/
         environment:
-        - "POSTGRES_HOST_AUTH_METHOD=trust"
+            - "POSTGRES_HOST_AUTH_METHOD=trust"
 
 volumes:
     static:
     postgres_data:
 
+
 secrets:
     host_ssh_key:
         file: ~/.ssh/linode
-        
