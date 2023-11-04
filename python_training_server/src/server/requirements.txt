@@ -4,3 +4,4 @@ django-mysql==4.11.0
 paramiko
 gunicorn
 psycopg2
+debugpy==1.5.1
