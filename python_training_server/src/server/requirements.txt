@@ -2,3 +2,6 @@ django==4.2.3
 django-extensions==3.2.3
 django-mysql==4.11.0
 paramiko
+gunicorn
+psycopg2
+debugpy==1.5.1

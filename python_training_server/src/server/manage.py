@@ -5,8 +5,17 @@ import sys
 
 
 def main():
+    
+    
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
+
+    # start new section
+    from django.conf import settings
+
+   
+    # end new section
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
