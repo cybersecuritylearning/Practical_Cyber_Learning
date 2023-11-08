@@ -9,6 +9,7 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt .
 
 RUN pip install -r requirements.txt
+#this is for non root user, should work
 
 COPY . .
 
@@ -18,5 +19,8 @@ RUN apt-get update
 
 RUN mkdir /logs
 
+
 RUN mkdir /logs/django_logs
-RUN chown -R www-data:www-data /logs/django_logs 2>/tmp/err
+RUN chown -R www-data:www-data /logs
+
+

@@ -6,7 +6,8 @@ services:
         build:
             context: ./src/server/
             dockerfile: ./Dockerfile
-        command: gunicorn --user www-data --workers 16 --timeout 60 --access-logfile /server/logs/gunicorn_access.log --error-logfile /server/logs/gunicorn_error.log --capture-output --log-level info --bind 0.0.0.0:8000 server.wsgi:application
+            #we should modify the number of workers to be 16 when on master, 1 for debugging
+        command: gunicorn --user www-data --workers 1 --timeout 120 --access-logfile /server/logs/gunicorn_access.log --error-logfile /server/logs/gunicorn_error.log --capture-output --log-level info --bind 0.0.0.0:8000 server.wsgi:application
         restart: always
         volumes:
             - ./logs/:/server/logs:rw
@@ -15,9 +16,13 @@ services:
             - db
             - migration
         deploy:
-            replicas: 2
+            replicas: 1
+            
         secrets:
             - host_ssh_key
+        ports:              #this is for debbuging, should be commented on master
+            - 9001:9001     #also this one should be closed on master  
+          
 
     migration:
         build:
@@ -27,7 +32,7 @@ services:
             bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput&& ./update_modules_database.sh"
         volumes:
             - ./src/server:/server:rw
-            - static:/server/static:rw
+            - ./static:/server/static:rw
 
     nginx_server:
         build:
@@ -38,7 +43,7 @@ services:
         restart: always
         volumes:
             - ./logs/:/nginx/logs:rw
-            - static:/static:rw
+            - ./static:/static:rw
         depends_on:
             - cyberpython
     db:
