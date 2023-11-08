@@ -16,7 +16,7 @@ services:
             - db
             - migration
         deploy:
-            replicas: 1
+            replicas: 2
             
         secrets:
             - host_ssh_key
