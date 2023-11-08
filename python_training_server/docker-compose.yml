@@ -7,7 +7,7 @@ services:
             context: ./src/server/
             dockerfile: ./Dockerfile
             #we should modify the number of workers to be 16 when on master, 1 for debugging
-        command: gunicorn --user www-data --workers 1 --timeout 120 --access-logfile /server/logs/gunicorn_access.log --error-logfile /server/logs/gunicorn_error.log --capture-output --log-level info --bind 0.0.0.0:8000 server.wsgi:application
+        command: gunicorn --user www-data --workers 16 --timeout 120 --access-logfile /server/logs/gunicorn_access.log --error-logfile /server/logs/gunicorn_error.log --capture-output --log-level info --bind 0.0.0.0:8000 server.wsgi:application
         restart: always
         volumes:
             - ./logs/:/server/logs:rw
@@ -20,8 +20,8 @@ services:
             
         secrets:
             - host_ssh_key
-        ports:              #this is for debbuging, should be commented on master
-            - 9001:9001     #also this one should be closed on master  
+        # ports:              #this is for debbuging, should be commented on master
+        #     - 9001:9001     #also this one should be closed on master  
           
 
     migration:
