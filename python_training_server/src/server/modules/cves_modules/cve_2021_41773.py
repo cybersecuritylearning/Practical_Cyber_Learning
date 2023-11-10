@@ -12,7 +12,7 @@ PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 class CVE_2021_41773:
     REQUEST_METHOD_SUPPORTED = ["GET","POST"]
     TRAIN_ID = "TRAIN-01-08"
-    SSH_KEY = "/.ssh/linode"
+    SSH_KEY = "/run/secrets/host_ssh_key"
     
     def __init__(self,request):
         self.request = request
