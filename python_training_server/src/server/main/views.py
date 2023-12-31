@@ -338,3 +338,7 @@ def docker(request):
         logger.error(str(e))
     
     return JsonResponse({'status': status})
+
+
+def template_test(request):
+    return render(request=request,template_name='main/template_test.html')
