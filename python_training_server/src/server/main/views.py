@@ -341,4 +341,5 @@ def docker(request):
 
 
 def template_test(request):
-    return render(request=request,template_name='main/template_test.html')
+   
+    return render(request=request,template_name='main/template_test.html',context={"Modules":Learning_Modules.objects.all()})
