@@ -24,3 +24,4 @@ RUN mkdir /logs/django_logs
 RUN chown -R www-data:www-data /logs
 
 
+
