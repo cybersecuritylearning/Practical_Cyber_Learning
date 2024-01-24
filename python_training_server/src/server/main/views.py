@@ -341,5 +341,11 @@ def docker(request):
 
 
 def template_test(request):
-   
-    return render(request=request,template_name='main/template_test.html',context={"Modules":Learning_Modules.objects.all()})
+    if not 'mod_name' in request.GET:
+        return render(request=request,template_name='main/template_test.html',context={"Modules":Learning_Modules.objects.all()})
+    
+    User = UserToken.objects.filter(User=request.user)[0]
+    User.current_level = request.GET['mod_name']
+    User.save()
+    
+    return redirect("main:Learn_page_for_users")

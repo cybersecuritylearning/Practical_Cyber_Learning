@@ -11,7 +11,10 @@
               <p>{{mod.Module_message|safe}}</p>
             </div>
             <div class="card-action">
-              <a href="#">Start</a>
+              <form action="/home/template">
+              <input type="hidden" value="{{mod.Module_name}}" name="mod_name">
+              <input type="submit" value="Start">
+                </form>
             </div>
           </div>
         </div>
