@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% include 'main/includes/navbar.html' %}
+
+<div class="row">
+    {% for categ in categs %}
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">{{ categ }}</span>
+                <p>Categ message</p>
+            </div>
+            <div class="card-action">
+              <form action="/home/template">
+              <input type="hidden" value="{{ categ }}" name="mod_name">
+              <input type="submit" value="Start">
+                </form>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -341,11 +341,14 @@ def docker(request):
 
 
 def template_test(request):
-    if not 'mod_name' in request.GET:
-        return render(request=request,template_name='main/template_test.html',context={"Modules":Learning_Modules.objects.all()})
+    # if not 'mod_name' in request.GET:
+    #     return render(request=request,template_name='main/template_test.html',context={"Modules":Learning_Modules.objects.all()})
     
-    User = UserToken.objects.filter(User=request.user)[0]
-    User.current_level = request.GET['mod_name']
-    User.save()
+    # User = UserToken.objects.filter(User=request.user)[0]nique_categ
+    # User.current_level = request.GET['mod_name']
+    # User.save()
     
-    return redirect("main:Learn_page_for_users")
+    categories = Learning_Modules.objects.values_list("Module_type",flat=True)
+
+    unique_categ = list(set(categories))
+    return render(request=request,template_name='main/dashboard.html',context={"categs":unique_categ})
