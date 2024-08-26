@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 
 from .models import UserToken, Learning_Modules
@@ -62,6 +63,7 @@ def login_request(request):
                   template_name = "main/login.html",
                   context={"form":form})
 
+@login_required
 def hello(request):
     """
     This function is the init of a user, checks if a user exists or not in
@@ -112,6 +114,9 @@ def learn(request):
 
     flag = None
     
+    if not request.user.is_authenticated:
+        return redirect("main:login_page")
+
     if request.method == "POST":
         try:
             flag = request.POST['Flag']
@@ -277,8 +282,6 @@ def register(request):
                 template_name="main/register.html",
                 context={"form":form})
 
-
-
 def move(request):
     """Module which handles modules movement
     params:
@@ -379,7 +382,7 @@ def docker(request):
     
     return JsonResponse({'status': status})
 
-
+@login_required
 def dashboard(request):
     """This is the dashboard with all modules
     params:
@@ -391,6 +394,7 @@ def dashboard(request):
 
     return render(request=request,template_name='main/dashboard.html',context={"categs":unique_categ})
 
+@login_required
 def load_categ(request):
     """
     This function loads the modules of the categories and displays to the users

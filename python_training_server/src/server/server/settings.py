@@ -27,6 +27,7 @@ SECRET_KEY = "django-insecure-qip$wp%937vgux4elgxp&v%!1s1pd^6c9f0stlifxt*gq5w0i0
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
+LOGIN_URL = '/home/login' 
 
 
 # Application definition
