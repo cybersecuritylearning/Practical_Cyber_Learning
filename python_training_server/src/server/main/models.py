@@ -28,6 +28,7 @@ class Learning_Modules(models.Model):
     Module_tips = models.TextField(blank=True)
     Module_type = models.CharField(max_length=30)
     CVE_number = models.CharField(max_length=20)
+    Category_tag = models.TextField(blank=True)
 
 def __str__(self):
     return self.Module_name

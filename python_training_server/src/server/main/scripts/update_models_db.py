@@ -20,9 +20,10 @@ def init_database():
             modules = Learning_Modules()
             modules.Module_name = data['TRAIN_ID']
             modules.Module_message = data['TRAIN_QUEST']
-            modules.Module_type = data["MODULE_TYPE"]
-            modules.CVE_number = data["CVE_number"]
-            
+            modules.Module_type = data['MODULE_TYPE']
+            modules.CVE_number = data['CVE_number']
+            modules.Category_tag = data['CATEGORY_TAG']
+
             with open(f"sql_template/{data['TRAIN_ID']}") as tip_file:
                 modules.Module_tips = tip_file.read()
             modules.save()
