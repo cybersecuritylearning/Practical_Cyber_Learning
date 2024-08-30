@@ -1,10 +1,8 @@
-from http import server
 from importlib import import_module
 import glob,os,sys
-import re
 from datetime import datetime
 from hashlib import sha256
-import json, random
+import json
 import logging
 
 from django.http import HttpResponse, JsonResponse
@@ -14,6 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 
 from .models import UserToken, Learning_Modules
@@ -28,14 +27,23 @@ PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 logger = logging.getLogger(__name__)
 
 response_data = {"instance":""}
-# Create your views here.
 
 def logout_request(request):
+    """This is used for logging out
+    params:
+        request(Django_request_object):this is a object with a session
+    
+    """
     logout(request)
     messages.info(request, "Logged out successfully!")
     return redirect("main:login_page")
 
 def login_request(request):
+    """This is used for authentication
+     params:
+        request(Django_request_object):this is a object with a session
+    
+    """
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
@@ -55,8 +63,15 @@ def login_request(request):
                   template_name = "main/login.html",
                   context={"form":form})
 
+@login_required
 def hello(request):
-    
+    """
+    This function is the init of a user, checks if a user exists or not in
+    database and adds it if not and sets a generic level, otherwise it 
+    adds them.
+     params:
+        request(Django_request_object):this is a object with a session
+    """
     try:
         User = UserToken.objects.filter(User=request.user)[0]
     except IndexError as e:
@@ -65,7 +80,7 @@ def hello(request):
         return redirect("main:login_page")
 
     button_v = "Start"
-    url = "/home/learn"
+    url = "/home/dashboard"
     message = f"""
             Welcome {User.User.username} to Cyber Security Python Hands On Course
             Your key is {User.UserId} and you have to include it in your requests as
@@ -90,8 +105,18 @@ def hello(request):
                   context=data)
 
 def learn(request):
+    """
+    This is the function which parses users flags, and also 
+    gives them their desired exercise
+     params:
+        request(Django_request_object):this is a object with a session
+    """
+
     flag = None
     
+    if not request.user.is_authenticated:
+        return redirect("main:login_page")
+
     if request.method == "POST":
         try:
             flag = request.POST['Flag']
@@ -122,8 +147,6 @@ def learn(request):
                     message = module.Module_message
                     user.Current_Level = current_level
                     user.save()
-                    
-                    
                     
                     if "TRAIN_CVE" in module.Module_type:
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
@@ -156,8 +179,16 @@ def learn(request):
     
     
     User = UserToken.objects.filter(User=request.user)[0]
-    current_level = User.Current_Level
-    
+    try:
+        data = request.GET['mod_name']
+        if data:
+            current_level = data
+        else:
+            current_level = User.Current_Level
+    except Exception as e:
+        logger.error(str(e))
+
+
     __current_level_model = Learning_Modules.objects.filter(Module_name=current_level)[0]
 
     return render(request = request,
@@ -172,6 +203,8 @@ def learn(request):
 def run_simple_python(request):
     """It handles python simple requests to the simple traying endpoints
     If a user makes requests with python or curl this is called
+     params:
+        request(Django_request_object):this is a object with a session
     """
     
     simple_modules_path = PARENT_DIR + "/modules/run_simple_python/"
@@ -214,6 +247,12 @@ def run_simple_python(request):
     return HttpResponse(data['Data'])
 
 def register(request):
+    """
+    This function registers a user
+    params:
+        request(Django_request_object):this is a object with a session
+
+    """
     if request.method =="POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
@@ -243,10 +282,12 @@ def register(request):
                 template_name="main/register.html",
                 context={"form":form})
 
-
-
 def move(request):
-    """Module which handles modules movement"""
+    """Module which handles modules movement
+    params:
+        request(Django_request_object):this is a object with a session
+
+    """
     user = UserToken.objects.filter(User=request.user)[0]
     current_level = user.Current_Level
     
@@ -307,10 +348,12 @@ def move(request):
 def docker(request):
     """It loads cve modules and it's called when a user
     press the start button for the instance
+    params:
+        request(Django_request_object):this is a object with a session
+
     """
     cve_modules_path = PARENT_DIR + "/modules/cves_modules/"
     sys.path.append(cve_modules_path)
-    
     
     try:
        
@@ -338,3 +381,33 @@ def docker(request):
         logger.error(str(e))
     
     return JsonResponse({'status': status})
+
+@login_required
+def dashboard(request):
+    """This is the dashboard with all modules
+    params:
+        request(Django_request_object):this is a object with a session
+
+    """
+    categories = Learning_Modules.objects.values_list("Module_type",flat=True)
+    unique_categ = list(set(categories))
+
+    return render(request=request,template_name='main/dashboard.html',context={"categs":unique_categ})
+
+@login_required
+def load_categ(request):
+    """
+    This function loads the modules of the categories and displays to the users
+    params:
+        request(Django_request_object):this is a object with a session
+    """
+    
+    category = request.GET['mod_name']
+    try:
+        categs = Learning_Modules.objects.filter(Module_type=category)
+    except Exception as e:
+        logger.error(str(e))
+
+    return render(request=request,template_name='main/template_test.html',context={"Modules":categs})
+    
+    
