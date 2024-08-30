@@ -3,12 +3,12 @@
 {% include 'main/includes/navbar.html' %}
 
 <div class="row" style="margin-top: 6%;">
-  {% for categ in categs %}
+  {% for categ, categ_message in categs %}
       <div class="col s12 m6">
           <div class="card blue-grey darken-1">
               <div class="card-content white-text">
                   <span class="card-title">{{ categ }}</span>
-                  <p>Categ message</p>
+                  <p>{{ categ_message }}</p>
               </div>
               <div class="card-action">
                   <form action="/home/load_categ">
