@@ -35,9 +35,9 @@ class CVE_2021_41773:
         return flag
 
 
-    def __start_docker(self,flag,user):
+    def __restart_docker(self,flag,user):
         """
-        It starts the vulnerable docker instance
+        It restarts the vulnerable docker instance
         params:
             flag(str):represents a flag which will be written to the vuln docker
         return:
@@ -48,8 +48,7 @@ class CVE_2021_41773:
         self.__conn.exec_command(f'docker exec {self.TRAIN_ID}_{user.UserId} sh -c "echo {flag} > /tmp/flag.txt"')
         output = self.__conn.exec_command(f"docker exec {self.TRAIN_ID}_{user.UserId} cat /tmp/flag.txt")
         read_flag = output[1].read().decode().strip()
-        
-        
+                
         if flag == read_flag:
             return True
         return False        
@@ -63,7 +62,7 @@ class CVE_2021_41773:
         """
         flag = self.make_flag(user)
         
-        __docker_run = self.__start_docker(flag,user)
+        __docker_run = self.__restart_docker(flag,user)
         if __docker_run:
             user.Hash_check = flag
             user.save()
