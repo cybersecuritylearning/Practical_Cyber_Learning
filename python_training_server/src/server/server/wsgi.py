@@ -13,9 +13,9 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
 
-# import debugpy
+import debugpy
 
-# debugpy.listen(('0.0.0.0', 9001))
+# debugpy.listen(('0.0.0.0', 19001))
 # debugpy.wait_for_client()
 # print("connected")
 

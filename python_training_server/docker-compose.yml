@@ -21,7 +21,7 @@ services:
         secrets:
             - host_ssh_key
         # ports:              #this is for debbuging, should be commented on master
-        #     - 9001:9001     #also this one should be closed on master  
+        #     - 19001:19001     #also this one should be closed on master  
           
 
     migration:
@@ -52,7 +52,13 @@ services:
             - postgres_data:/var/lib/postgresql/data/
         environment:
             - "POSTGRES_HOST_AUTH_METHOD=trust"
-
+    # pgadmin:
+    #     image: dpage/pgadmin4
+    #     environment:
+    #         - PGADMIN_DEFAULT_EMAIL=admin@example.com
+    #         - PGADMIN_DEFAULT_PASSWORD=admin123
+    #     ports:
+    #         - "8081:80"  # Expose pgAdmin on port 8080
 volumes:
     static:
     postgres_data:

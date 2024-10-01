@@ -4,8 +4,6 @@
     
     $(document).ready(function() {
     
-      
-
     const button = document.getElementById('Flag-btn');
     var flag_input = document.getElementById('flag');
 
@@ -28,6 +26,11 @@
                   $("#Instance-btn").html(json.instance);
                   $("#quest_tip").html(json.tips);
                   $("#solved").html(json.done);
+                  
+                  let url = new URL(window.location.href);
+                  url.searchParams.set('mod_name', json.current_level); 
+                  history.replaceState(null, '', url);
+
                   try {
                     if (json.fail){
                     M.toast({html: json.fail, classes: 'red rounded'});
@@ -71,6 +74,10 @@
                 $("#quest_message").html(json.quest);
                 $("#quest_tip").html(json.tips);
                 $("#docker_start").html(json.instance);
+
+                let url = new URL(window.location.href);
+                url.searchParams.set('mod_name', json.current_level); 
+                history.replaceState(null, '', url);
               }
             
       });

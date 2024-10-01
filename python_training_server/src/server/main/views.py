@@ -130,17 +130,11 @@ def learn(request):
                         content_type="application/json"
                     ) 
                 
-            user.Passed_modules.append(user.Current_Level)
-            level_a = user.Current_Level
+            if user.Current_Level not in user.Passed_modules:
+                user.Passed_modules.append(user.Current_Level)
+            
             Lrmodules = Learning_Modules.objects.all()
-            
-            current_module = Learning_Modules.objects.filter(Module_name=level_a)[0]
-            if current_module.Module_type == "TRAIN_CVE":
-                server_ip=CVEsAndServers.get_server(current_module.CVE_number)
-                connection = Connection('/run/secrets/host_ssh_key',server_ip,'root')
-                connection.make_connection()
-                connection.exec_command(f"docker stop {current_module.Module_name}_{user.UserId}")
-            
+                        
             for module in Lrmodules.iterator():
                 if module.Module_name not in user.Passed_modules:
                     current_level = module.Module_name
@@ -152,17 +146,17 @@ def learn(request):
                         server_ip = CVEsAndServers.get_server(module.CVE_number)
                         connection = Connection('/run/secrets/host_ssh_key',server_ip,'root')
                         connection.make_connection()
-                        port = connection.get_available_port()
-                        response_data["instance"]=MESSAGES.INSTANCE.replace("PLACEHOLDER",f"{server_ip}:{port}")
-                        if "PLACEHOLDER" in message:
-                            message=message.replace("PLACEHOLDER",f"{server_ip}:{port}")
+                        output = connection.exec_command(f"docker exec {module.CVE_number} cat /tmp/flag.txt")
+                        read_flag = output[1].read().decode().strip()
+                        user.Hash_check = read_flag
+                        response_data["instance"]="Restart Instance"
                     else:
                         response_data["instance"]=""
 
+                    response_data['current_level'] = current_level
                     response_data['quest'] = message
                     response_data['tips'] = module.Module_tips
                     
-                    user.Hash_check = ''
                     user.save()
                     
                     return HttpResponse(
@@ -327,6 +321,7 @@ def move(request):
         else:
             response_data["instance"]=""
         
+        response_data['current_level'] = current_level
         response_data['quest'] = message
         response_data['tips'] = module.Module_tips
         
