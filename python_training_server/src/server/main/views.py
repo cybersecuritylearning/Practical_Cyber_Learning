@@ -179,18 +179,24 @@ def learn(request):
             current_level = data
         else:
             current_level = User.Current_Level
+        
+        __current_level_model = Learning_Modules.objects.filter(Module_name=current_level)[0]
+        
+        if current_level in User.Passed_modules:
+            rsolved = MESSAGES.SOLVED
+        else:
+            rsolved = ''
+    
     except Exception as e:
         logger.error(str(e))
-
-
-    __current_level_model = Learning_Modules.objects.filter(Module_name=current_level)[0]
-
+    
     return render(request = request,
                 template_name='main/quest.html',
                 context={"message":__current_level_model.Module_message,
                         "tip":__current_level_model.Module_tips,
                         "api_key_here":User.UserId,
-                        "instance":response_data["instance"]}
+                        "instance":response_data["instance"],
+                        "solved":rsolved}
             )
 
 @csrf_exempt
