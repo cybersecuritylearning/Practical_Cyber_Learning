@@ -17,10 +17,7 @@ class CVE_2021_41773:
     def __init__(self,request):
         self.request = request
         self.result = {"Data":"Try Harder"}
-        self.data = request.POST["con_data"]
-        self.ip = self.data.split(":")[0]
-        self.port = self.data.split(":")[1]
-        self.__conn = Connection(self.SSH_KEY,self.ip,"root")
+        self.__conn = Connection(self.SSH_KEY,"192.168.0.3",22,"root")
         self.__conn.make_connection()
         
     def make_flag(self,user):
