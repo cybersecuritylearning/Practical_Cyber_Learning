@@ -179,9 +179,12 @@ def learn(request):
             current_level = User.Current_Level
         
         __current_level_model = Learning_Modules.objects.filter(Module_name=current_level)[0]
+        message = __current_level_model.Module_message
         
         if "TRAIN_CVE" in __current_level_model.Module_type:
             docker(request, __current_level_model)
+            if "TARGET_ADDR" in message:
+                        message=message.replace("TARGET_ADDR",f"https://pythoncyber.go.ro:9090/{__current_level_model.CVE_number}/")
         
         if current_level in User.Passed_modules:
             
@@ -194,7 +197,7 @@ def learn(request):
     
     return render(request = request,
                 template_name='main/quest.html',
-                context={"message":__current_level_model.Module_message,
+                context={"message":message,
                         "tip":__current_level_model.Module_tips,
                         "api_key_here":User.UserId,
                         "solved":rsolved}
@@ -322,8 +325,8 @@ def move(request):
                         connection = Connection('/run/secrets/host_ssh_key',server_ip,'root')
                         connection.make_connection()
                         port = connection.get_available_port()
-                        if "PLACEHOLDER" in message:
-                            message=message.replace("PLACEHOLDER",f"https://pythoncyber.go.ro:8040/{module.CVE_number}")
+                        if "TARGET_ADDR" in message:
+                            message=message.replace("TARGET_ADDR",f"https://pythoncyber.go.ro:9090/{module.CVE_number}")
                 
         response_data['current_level'] = current_level
         response_data['quest'] = message

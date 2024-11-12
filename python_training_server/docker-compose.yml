@@ -66,4 +66,4 @@ volumes:
 
 secrets:
     host_ssh_key:
-        file: ~/.ssh/linode
+        file: ~/.ssh/VulnDock
