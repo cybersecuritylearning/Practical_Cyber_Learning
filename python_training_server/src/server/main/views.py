@@ -412,18 +412,10 @@ def contact(request):
     params:
         request(Django_request_object):this is a object with a session
     """   
-    message = """
-        We'd love to hear your feedback! Please reach out to us at cyber.contact.learning@gmail.com.
-        If you'd like to support our work, feel free to send some ETH to the following wallet address:
-        0xB0153C4e2D091714d1F771754aCd09Ac4F742bE6.
-        Also, If you want to join our team, just tell us by sending also an email to the above address.
-        Thank you for your support!
-
-    """
     data = {
         "Button_display":"Go Back",
         "redirect":"/home/dashboard",
-        "Message":message,
+        "Message":MESSAGES.CONTACT,
         "api_key_here":"*"
     }
     
