@@ -404,5 +404,28 @@ def load_categ(request):
         logger.error(str(e))
 
     return render(request=request,template_name='main/list_modules.html',context={"Modules":categs})
+
+@login_required
+def contact(request):
+    """
+    This function is just a contact returning view with official email
+    params:
+        request(Django_request_object):this is a object with a session
+    """   
+    message = """
+        We'd love to hear your feedback! Please reach out to us at cyber.contact.learning@gmail.com.
+        If you'd like to support this project financially, feel free to send ETH to the following wallet address:
+        0xB0153C4e2D091714d1F771754aCd09Ac4F742bE6.
+        Thank you for your support!
+
+    """
+    data = {
+        "Button_display":"Go Back",
+        "redirect":"/home/dashboard",
+        "Message":message",
+        "api_key_here":"*"
+    }
     
-    
+    return render(request = request,
+                  template_name='main/home.html',
+                  context=data)
