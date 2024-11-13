@@ -7,7 +7,7 @@ import json
 import logging
 import os
 
-LOG_PATH = "/logs/django_logs/modules.log"
+LOG_PATH = "/server/logs/django_logs/modules.log"
 PATH_CVES_SERVERS = "main/core/"
 
 

@@ -32,6 +32,7 @@ services:
             bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput&& ./update_modules_database.sh"
         volumes:
             - ./src/server:/server:rw
+            - ./logs/:/server/logs:rw
             - ./static:/server/static:rw
 
     nginx_server:
