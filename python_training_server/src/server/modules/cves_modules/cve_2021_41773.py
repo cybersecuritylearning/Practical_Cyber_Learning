@@ -1,11 +1,7 @@
-import paramiko
 from main.core.connections import Connection
 
 """Simple request module"""
 import os
-from hashlib import sha256
-from datetime import datetime
-import uuid
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
