@@ -84,7 +84,7 @@ def hello(request):
     message = f"""
             Welcome {User.User.username} to Cyber Security Python Hands On Course
             Your key is {User.UserId} and you have to include it in your requests as
-            Usert:<key> header
+            Usert:<key> header, it is specified in modules.
             """
    
     if len(User.Passed_modules):
@@ -403,6 +403,6 @@ def load_categ(request):
     except Exception as e:
         logger.error(str(e))
 
-    return render(request=request,template_name='main/template_test.html',context={"Modules":categs})
+    return render(request=request,template_name='main/list_modules.html',context={"Modules":categs})
     
     
