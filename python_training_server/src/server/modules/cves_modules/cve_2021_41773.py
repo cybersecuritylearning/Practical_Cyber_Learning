@@ -37,8 +37,6 @@ class CVE_2021_41773:
         return:
             result(dict):represents a dictionary with the result
         """
-        
-        
         __docker_flag = self.__sets_user_flag()
         if __docker_flag:
             user.Hash_check = __docker_flag
