@@ -143,12 +143,9 @@ def learn(request):
                     user.save()
                     
                     if "TRAIN_CVE" in module.Module_type:
-                        server_ip = CVEsAndServers.get_server(module.CVE_number)
-                        connection = Connection('/run/secrets/host_ssh_key',server_ip,'root')
-                        connection.make_connection()
-                        output = connection.exec_command(f"docker exec {module.CVE_number} cat /tmp/flag.txt")
-                        read_flag = output[1].read().decode().strip()
-                        user.Hash_check = read_flag
+                        docker(request, module)
+                        if "TARGET_ADDR" in message:
+                            message=message.replace("TARGET_ADDR",f"https://pythoncyber.go.ro:9090/{module.CVE_number}/")
                    
 
                     response_data['current_level'] = current_level
@@ -321,10 +318,6 @@ def move(request):
         user.save()
         
         if "TRAIN_CVE" in module.Module_type:
-                        server_ip = CVEsAndServers.get_server(module.CVE_number)
-                        connection = Connection('/run/secrets/host_ssh_key',server_ip,'root')
-                        connection.make_connection()
-                        port = connection.get_available_port()
                         if "TARGET_ADDR" in message:
                             message=message.replace("TARGET_ADDR",f"https://pythoncyber.go.ro:9090/{module.CVE_number}")
                 
