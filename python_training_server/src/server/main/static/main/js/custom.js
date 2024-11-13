@@ -117,4 +117,10 @@
       }
     
 });
+
+  setInterval(function() {
+    location.reload();
+    }, 1200000); // 1200000 ms = 20 minutes
+
+
     });
