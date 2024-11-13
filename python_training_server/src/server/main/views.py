@@ -14,13 +14,10 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
-
 from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from .core.utils import dec_number_from_name, inc_number_from_name, init_userToken
-from .core.utils import CVEsAndServers
-from .core.connections import Connection
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -414,7 +411,7 @@ def contact(request):
     """   
     data = {
         "Button_display":"Go Back",
-        "redirect":"/home/dashboard",
+        "redirect":"/hello",
         "Message":MESSAGES.CONTACT,
         "api_key_here":"*"
     }

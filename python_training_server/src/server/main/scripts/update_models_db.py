@@ -29,6 +29,7 @@ def init_database():
             modules.Category_tag = data['CATEGORY_TAG']
             modules.Module_tips = tip_file.read()
             modules.save()
+        data = ''
  
 def run():
     init_database()
