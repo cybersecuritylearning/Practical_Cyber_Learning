@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-qip$wp%937vgux4elgxp&v%!1s1pd^6c9f0stlifxt*gq5w0i0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-CSRF_TRUSTED_ORIGINS = ['http://pythoncyber.go.ro:8080']
+CSRF_TRUSTED_ORIGINS = ['https://pythoncyber.go.ro:8080']
 
 ALLOWED_HOSTS = ["*"]
 LOGIN_URL = '/home/login' 

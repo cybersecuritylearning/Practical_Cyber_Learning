@@ -13,7 +13,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN mkdir /.ssh && ln -s /run/secrets/host_ssh_key /.ssh/linode
+RUN mkdir /.ssh && ln -s /run/secrets/host_ssh_key /.ssh/VulnDock
 
 RUN apt-get update
 

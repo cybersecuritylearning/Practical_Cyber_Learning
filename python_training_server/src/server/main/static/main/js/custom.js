@@ -73,7 +73,6 @@
                 $("#solved").html(json.done);
                 $("#quest_message").html(json.quest);
                 $("#quest_tip").html(json.tips);
-                $("#docker_start").html(json.instance);
 
                 let url = new URL(window.location.href);
                 url.searchParams.set('mod_name', json.current_level); 
@@ -104,7 +103,6 @@
               $("#solved").html(json.done);
               $("#quest_message").html(json.quest);
               $("#quest_tip").html(json.tips);
-              $("#docker_start").html(json.instance);
 
               let url = new URL(window.location.href);
               url.searchParams.set('mod_name', json.current_level); 
@@ -119,4 +117,10 @@
       }
     
 });
+
+  setInterval(function() {
+    location.reload();
+    }, 1200000); // 1200000 ms = 20 minutes
+
+
     });
