@@ -422,7 +422,7 @@ def contact(request):
     data = {
         "Button_display":"Go Back",
         "redirect":"/home/dashboard",
-        "Message":message",
+        "Message":message,
         "api_key_here":"*"
     }
     
