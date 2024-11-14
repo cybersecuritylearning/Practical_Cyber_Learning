@@ -18,9 +18,8 @@ class UserToken(models.Model):
         max_length=(11 * 12),  # 6 * 10 character nominals, plus commas
     )
 
-
-def __str__(self):
-    return self.UserId
+    def __str__(self):
+        return self.UserId
 
 class Learning_Modules(models.Model):
     Module_name = models.CharField(max_length=128)
@@ -30,5 +29,5 @@ class Learning_Modules(models.Model):
     CVE_number = models.CharField(max_length=20)
     Category_tag = models.TextField(blank=True)
 
-def __str__(self):
-    return self.Module_name
+    def __str__(self):
+        return self.Module_name
