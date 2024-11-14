@@ -18,5 +18,6 @@ urlpatterns = [
     path("login",views.login_request,name="login_page"),
     path("docker/", views.docker, name="docker_start"),
     path("dashboard/",views.dashboard, name="dashboard"),
-    path("load_categ/",views.load_categ,name="load_categ")
+    path("load_categ/",views.load_categ,name="load_categ"),
+    path("contact",views.contact, name="contact")
 ]

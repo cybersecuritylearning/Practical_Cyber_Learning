@@ -42,3 +42,11 @@ class MESSAGES:
     </div>
     <script type="text/javascript" src='/static/main/js/start_docker_inst.js' ></script>
     """
+    CONTACT = """
+        We'd love to hear your feedback! Please reach out to us at <b>cyber.contact.learning@gmail.com.</b><br>
+        If you'd like to support our work, feel free to send some ETH to the following wallet address:<br><b>
+        0xB0153C4e2D091714d1F771754aCd09Ac4F742bE6.</b><br>
+        Also, If you want to join our team, just tell us by sending also an <b>email to the above address.</b>
+        <br><b>Thank you for your support!</b>
+
+    """

@@ -14,13 +14,10 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
-
 from .models import UserToken, Learning_Modules
 from .forms import NewUserForm
 from .core.Messages import MESSAGES 
 from .core.utils import dec_number_from_name, inc_number_from_name, init_userToken
-from .core.utils import CVEsAndServers
-from .core.connections import Connection
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -84,7 +81,7 @@ def hello(request):
     message = f"""
             Welcome {User.User.username} to Cyber Security Python Hands On Course
             Your key is {User.UserId} and you have to include it in your requests as
-            Usert:<key> header
+            Usert:<key> header, it is specified in modules.
             """
    
     if len(User.Passed_modules):
@@ -403,6 +400,22 @@ def load_categ(request):
     except Exception as e:
         logger.error(str(e))
 
-    return render(request=request,template_name='main/template_test.html',context={"Modules":categs})
+    return render(request=request,template_name='main/list_modules.html',context={"Modules":categs})
+
+@login_required
+def contact(request):
+    """
+    This function is just a contact returning view with official email
+    params:
+        request(Django_request_object):this is a object with a session
+    """   
+    data = {
+        "Button_display":"Go Back",
+        "redirect":"/hello",
+        "Message":MESSAGES.CONTACT,
+        "api_key_here":"*"
+    }
     
-    
+    return render(request = request,
+                  template_name='main/home.html',
+                  context=data)
