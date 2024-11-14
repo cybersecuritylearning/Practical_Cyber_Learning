@@ -411,7 +411,7 @@ def contact(request):
     """   
     data = {
         "Button_display":"Go Back",
-        "redirect":"/hello",
+        "redirect":"/home/hello",
         "Message":MESSAGES.CONTACT,
         "api_key_here":"*"
     }
