@@ -1,0 +1,80 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberSec Learn</title>
+  <!-- Materialize CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="blue darken-3">
+    <div class="nav-wrapper container">
+      <a href="#" class="brand-logo">CyberPython</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="#features">Features</a></li>
+        <!-- <li><a href="#about">About</a></li> -->
+        <li><a href="/home/register" class="waves-effect waves-light btn yellow darken-2">Sign Up</a></li>
+        <li><a href="/home/login" class="waves-effect waves-light btn yellow darken-2">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Header Section -->
+  <header class="blue darken-4 white-text center-align" style="padding: 60px 20px;">
+    <h1>Level Up Your Cybersecurity Skills</h1>
+    <p>Explore, learn, and practice cybersecurity concepts at your own pace.</p>
+    <a href="/home/register" class="waves-effect waves-light btn-large yellow darken-2">Create an Account</a>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="container section">
+    <div class="row">
+      <div class="col s12 m4">
+        <div class="icon-block center">
+          <i class="material-icons large blue-text">security</i>
+          <h5>Real-World Scenarios</h5>
+          <p>Hands-on exercises based on real-world vulnerabilities and exploits.</p>
+        </div>
+      </div>
+      <div class="col s12 m4">
+        <div class="icon-block center">
+          <i class="material-icons large blue-text">school</i>
+          <h5>Self-Paced Learning</h5>
+          <p>Learn at your own pace with guided tutorials and challenges.</p>
+        </div>
+      </div>
+      <div class="col s12 m4">
+        <div class="icon-block center">
+          <i class="material-icons large blue-text">group</i>
+          <h5>Community Support</h5>
+          <p>Join a community of learners and share your journey.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call-to-Action Section -->
+  <section class="blue lighten-5 center-align" style="padding: 40px 20px;">
+    <h4>Ready to Start Your Cybersecurity Journey?</h4>
+    <p>Sign up and take the first step today!</p>
+    <a href="/home/register" class="waves-effect waves-light btn-large blue darken-3">Get Started</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="blue darken-3 white-text center-align" style="padding: 20px 0;">
+    <p>&copy; 2024 CyberPython Learn | Empowering Future Cybersecurity Experts</p>
+  </footer>
+
+  <!-- Materialize JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
+
+
+{% endblock %}

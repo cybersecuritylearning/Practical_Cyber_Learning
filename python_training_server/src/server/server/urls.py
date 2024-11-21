@@ -19,6 +19,6 @@ from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', lambda request: redirect('home/', permanent=True)),
+    path('', lambda request: redirect('home/', permanent=False)),
     path("home/",include("main.urls"))
 ]
