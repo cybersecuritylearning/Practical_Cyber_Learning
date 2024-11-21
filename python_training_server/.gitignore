@@ -137,3 +137,6 @@ celerybeat-schedule
 
 # Sphinx documentation
 docs/_build/
+
+# pem
+.pem

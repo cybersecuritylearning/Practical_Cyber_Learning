@@ -60,6 +60,13 @@ def login_request(request):
                   template_name = "main/login.html",
                   context={"form":form})
 
+def landing(request):
+    """
+    This is the landing page, it just make users to go register or login
+    """
+    return render(request = request,
+                  template_name='main/index.html')
+
 @login_required
 def hello(request):
     """

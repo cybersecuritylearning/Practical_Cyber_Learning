@@ -3,21 +3,24 @@
 {% include 'main/includes/navbar.html' %}
 
 <div class="row" style="margin-top: 6%;">
-  {% for categ, categ_message in categs %}
-      <div class="col s12 m6">
-          <div class="card blue-grey darken-1">
-              <div class="card-content white-text">
-                  <span class="card-title">{{ categ }}</span>
-                  <p>{{ categ_message }}</p>
-              </div>
-              <div class="card-action">
-                  <form action="/home/load_categ">
-                      <input type="hidden" value="{{ categ }}" name="mod_name">
-                      <input type="submit" value="Start">
-                  </form>
-              </div>
-          </div>
-      </div>
-  {% endfor %}
-</div>
+    {% for categ, categ_message in categs %}
+        <div class="col s12 m6"> <!-- Two columns on medium and up -->
+            <div class="card blue-grey darken-3" style="height: 350px; border-radius: 10px; margin: 10px auto; display: flex; flex-direction: column; justify-content: space-between;"">
+                <div class="card-content white-text" style="padding: 20px; overflow-y: auto; max-height: 220px;">
+                    <span class="card-title" style="font-weight: bold; margin-bottom: 15px;">{{ categ }}</span>
+                    <p style="color: #cfd8dc; font-size: 1rem; line-height: 1.4;">{{ categ_message }}</p>
+                </div>
+                <div class="card-action" style="background-color: #455a64; text-align: center;">
+                    <form action="/home/load_categ">
+                        <input type="hidden" value="{{ categ }}" name="mod_name">
+                        <input type="submit" 
+                               value="Start" 
+                               class="waves-effect waves-light btn yellow darken-2" 
+                               style="border-radius: 20px; font-weight: bold;">
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+  </div>
 {% endblock %}
