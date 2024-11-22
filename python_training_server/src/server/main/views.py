@@ -375,6 +375,8 @@ def docker(request,Module):
                 status = "Instance is up!"
             except Exception as e:
                 status = "Failed to start instance!"
+                logger.error(str(e))
+                
     except Exception as e:
         logger.error(str(e))
     
