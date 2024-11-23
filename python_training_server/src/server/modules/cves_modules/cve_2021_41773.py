@@ -25,6 +25,7 @@ class CVE_2021_41773(BaseCVE):
         __docker_flag = self.__gets_flag("cat /tmp/flag.txt")
         if __docker_flag:
             user.Hash_check = __docker_flag
+            user.Current_Level = self.TRAIN_ID
             user.save()
             return {"Status":"Up"}
         
