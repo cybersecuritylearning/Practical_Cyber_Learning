@@ -240,7 +240,7 @@ def run_simple_python(request):
             _cls = getattr(_mod,module.upper())
         except Exception as e:
             #log_data.log_debug(e)
-            print(str(e))
+            logger.error(str(e))
         if _cls.TRAIN_ID == User.Current_Level:
             try:
                 data = _cls(request).process(User)
