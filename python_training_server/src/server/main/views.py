@@ -389,9 +389,8 @@ def dashboard(request):
         request(Django_request_object):this is a object with a session
 
     """
-    categories = Learning_Modules.objects.values_list("Module_type","Category_tag")
+    categories = Learning_Modules.objects.values_list("Module_type","Category_tag").order_by("Module_name")
     unique_categ = list(set(categories))
-    
 
     return render(request=request,template_name='main/dashboard.html',context={"categs":unique_categ})
 
@@ -405,7 +404,7 @@ def load_categ(request):
     
     category = request.GET['mod_name']
     try:
-        categs = Learning_Modules.objects.filter(Module_type=category)
+        categs = Learning_Modules.objects.filter(Module_type=category).order_by('Module_name')
     except Exception as e:
         logger.error(str(e))
 
