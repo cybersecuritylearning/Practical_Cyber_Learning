@@ -1,2 +1,2 @@
-Try to do a quick google search on <b> Send XML data with a POST request in python</b>\n
+Try to do a quick google search on <b>Send XML data with a POST request in python</b><br>
 NOTE! You always have to set the <b>Usert</b> custom HTTP request header with your own <b>api-key</b> as its value!
