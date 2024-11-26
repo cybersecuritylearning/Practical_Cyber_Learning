@@ -1,4 +1,4 @@
 If you don't know how to tackle this, you could try to do a quick search on google
-like <b> How to make a POST request in python with data</b> or <b> How to POST data
-in python </b> but keep in mind
-that you always have to set the Usert header with your own api-key 
+like <b>How to make a POST request in python with data</b> or <b>How to POST data
+in python</b> but keep in mind
+that you always have to set the <b>Usert</b> header with your own api-key. 
