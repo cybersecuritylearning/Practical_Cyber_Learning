@@ -1,2 +1,2 @@
 Try to do a quick search on Google, or even better you can try to use Twitter, or Github. You can use querries like: <b>CVE-2021-3019 PoC</b>,
-or <b>CVE-2021-3019 exploit</b> but keep in mind, you could encounter some challenges with encoding. Try to search how to url encode chars like one <b>.</b> or two <b>..</b> or <b>/</b> and also make requests with them encoded. Keep in mind, you have to try harder every time. 
+or <b>CVE-2021-3019 exploit</b> but keep in mind, you could encounter some challenges with encoding. Try to search how to encode chars like one <b>.</b> or two <b>..</b> or <b>/</b> (URL encoding) and also make requests with them that way. Keep in mind, you have to try harder every time. 
