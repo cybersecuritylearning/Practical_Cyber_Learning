@@ -136,8 +136,11 @@ def learn(request):
                 
             if user.Current_Level not in user.Passed_modules:
                 user.Passed_modules.append(user.Current_Level)
-            
-            Lrmodules = Learning_Modules.objects.all()
+                user.save()
+
+            _current_level_obj = Learning_Modules.objects.filter(Module_name=user.Current_Level)[0]
+
+            Lrmodules = Learning_Modules.objects.filter(Category_tag=_current_level_obj.Category_tag).order_by("Module_name")
                         
             for module in Lrmodules.iterator():
                 if module.Module_name not in user.Passed_modules:
@@ -162,7 +165,10 @@ def learn(request):
                         json.dumps(response_data),
                         content_type="application/json"
                     ) 
-
+            return HttpResponse(
+                json.dumps({'done':MESSAGES.SOLVED,'return':True}),content_type="application/json"
+            )
+        
         except (KeyError,IndexError):
             return HttpResponse(
                         json.dumps({'fail':"Flag is not right, Try Harder!"}),
