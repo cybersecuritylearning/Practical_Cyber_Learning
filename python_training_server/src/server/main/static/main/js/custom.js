@@ -28,9 +28,13 @@
                   $("#solved").html(json.done);
                   
                   let url = new URL(window.location.href);
-                  url.searchParams.set('mod_name', json.current_level); 
-                  history.replaceState(null, '', url);
-
+                  if (json.current_level){
+                    url.searchParams.set('mod_name', json.current_level); 
+                    history.replaceState(null, '', url);
+                  }
+                  if(json.return){
+                    window.location.href="/home/dashboard";
+                  }
                   try {
                     if (json.fail){
                     M.toast({html: json.fail, classes: 'red rounded'});
