@@ -48,11 +48,8 @@ class REQUEST_WITH_CUSTOM_COOKIES:
                 # Updates user database
                 flag = self.make_flag(user)
                 self.result["Data"] = f"Good job! Here's your flag: \nFlag: {flag}"
+                
                 user.Hash_check = flag
-
-                if self.TRAIN_ID not in user.Passed_modules:
-                    user.Passed_modules.append(self.TRAIN_ID)
-                    
                 user.save()
         
         except Exception as e:
