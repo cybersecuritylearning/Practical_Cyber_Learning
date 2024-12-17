@@ -40,8 +40,7 @@ class FIRST_POST_REQUEST:
 
         if not len(self.request.POST):
             # Pass user and add the module to the passed one's list 
-            if self.TRAIN_ID not in user.Passed_modules:
-                user.Passed_modules.append(self.TRAIN_ID)
+            
             # Updates user database
             flag = self.make_flag(user)
             user.Hash_check = flag

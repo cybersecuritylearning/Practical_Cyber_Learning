@@ -39,9 +39,6 @@ class FIRST_GET_REQUEST:
             return self.result
 
         if not len(self.request.GET):
-            # Pass user and add the module to the passed one's list 
-            if self.TRAIN_ID not in user.Passed_modules:
-                user.Passed_modules.append(self.TRAIN_ID)
             # Updates user database
             flag = self.make_flag(user)
             user.Hash_check = flag
