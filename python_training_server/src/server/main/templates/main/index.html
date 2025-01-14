@@ -65,6 +65,14 @@
     <p>Sign up and take the first step today!</p>
     <a href="/home/register" class="waves-effect waves-light btn-large blue darken-3">Get Started</a>
   </section>
+ 
+  <div class="video-container">
+    {% load static %}
+    <video autoplay muted loop playsinline controls>
+      <source src='{% static "main/videos/cybersecurity_intro.webm" %}' type="video/webm">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
   <!-- Footer -->
   <footer class="blue darken-3 white-text center-align" style="padding: 20px 0;">

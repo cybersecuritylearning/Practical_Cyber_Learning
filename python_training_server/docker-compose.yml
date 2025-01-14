@@ -22,7 +22,6 @@ services:
             - host_ssh_key
         # ports:              #this is for debbuging, should be commented on master
         #     - 19001:19001     #also this one should be closed on master  
-          
 
     migration:
         build:
@@ -34,6 +33,8 @@ services:
             - ./src/server:/server:rw
             - ./logs/:/server/logs:rw
             - ./static:/server/static:rw
+        depends_on:
+            - db
 
     nginx_server:
         build:
